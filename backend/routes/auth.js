@@ -13,16 +13,25 @@ router.post('/signup', upload.single('shopLogo'), authController.signup);
 router.post('/login', authController.login);
 
 // GET all shops
-router.get('/getShops', (req, res) => {
-    ShopModel.find()
-      .then(shops => res.json(shops))
-      .catch(err => res.status(500).json({ message: 'Error retrieving shops', error: err }));
-  });
+// get 1 shop
+router.get('/getShops', async (req, res) => {
+  const { email } = req.query;
+  try {
+    const shop = await ShopModel.findOne({ email });
+    if (!shop) {
+      return res.status(404).json({ message: 'Shop not found' });
+    }
+    res.json(shop);
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving shop', error });
+  }
+});
+
 // Get Single shop by ID
 router.get('/shops/:id', authController.getShopById);
 
 // Update shop by ID
-router.put('/shops/:id', upload.single('image'), authController.updateShopById);
+router.put('/shops/:id', upload.single('shopLogo'), authController.updateShopById);
 
 
 

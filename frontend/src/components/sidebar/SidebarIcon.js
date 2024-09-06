@@ -45,8 +45,8 @@ export default function SidebarIcon() {
         Dashboard
       </Link>
       <Link
-        to="/profile"
-        className={location.pathname === "/profile" ? "active" : ""}
+        to="/shops"
+        className={location.pathname === "/shops" ? "active" : ""}
       >
         <img src={profileIcon} alt="Items" className="sidebar-icon" />
         Profile

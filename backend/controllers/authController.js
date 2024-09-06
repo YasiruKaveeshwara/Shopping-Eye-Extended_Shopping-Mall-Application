@@ -44,7 +44,7 @@ console.log(req.file);
       ownerName,
       location,
       phone,
-      shopUrl, 
+      shopLogo: shopUrl, // Save only the URL here
       email,
       password: hashedPassword
     });
@@ -176,7 +176,7 @@ exports.updateShopById = async (req, res) => {
     if (image) {
       // Upload image to Cloudinary and get URL
       const result = await cloudinary.uploader.upload(image.path);
-      shop.imageUrl = result.secure_url;
+      shop.shopLogo = result.secure_url;
     }
 
     await shop.save();

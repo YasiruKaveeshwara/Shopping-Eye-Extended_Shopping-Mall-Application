@@ -5,7 +5,7 @@ const ShopSchema = new mongoose.Schema({
   ownerName: { type: String, required: true },
   location: { type: String, required: true },
   phone: { type: String, required: true },
-  shopUrl: { type: String, required: true }, // URL or path to the logo image
+  shopLogo: { type: String, required: true }, // URL or path to the logo image
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true }
 });
