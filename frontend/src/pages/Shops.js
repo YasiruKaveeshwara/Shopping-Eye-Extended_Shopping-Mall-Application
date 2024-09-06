@@ -20,6 +20,9 @@ export default function Shops() {
       const data = await response.json();
       if (response.ok) {
         setShop(data);
+        // Update local storage with shop details
+        localStorage.setItem("shopName", data.shopName);
+        localStorage.setItem("shopLogo", data.shopLogo);
       } else {
         console.error('Error fetching shop:', data.message);
       }
@@ -27,6 +30,7 @@ export default function Shops() {
       console.error('Error fetching shop:', error);
     }
   };
+  
 
   const handleEdit = (shop) => {
     setEditingShop(shop);
