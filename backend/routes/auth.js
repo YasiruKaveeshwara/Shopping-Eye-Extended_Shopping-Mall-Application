@@ -11,19 +11,24 @@ router.post('/signup', upload.single('shopLogo'), authController.signup);
 
 // Login route
 router.post('/login', authController.login);
-router.get('/test', (req, res) => {
-    res.send('Test route is working');
-  });
-  
-  // GET all shops
-  router.get('/getShops', (req, res) => {
+
+// GET all shops
+router.get('/getShops', (req, res) => {
     ShopModel.find()
       .then(shops => res.json(shops))
       .catch(err => res.status(500).json({ message: 'Error retrieving shops', error: err }));
   });
-  //get shop user info
-  // Add Item
-  router.post('/items/add', upload.single('image'), itemController.addItem);
+// Get Single shop by ID
+router.get('/shops/:id', authController.getShopById);
+
+// Update shop by ID
+router.put('/shops/:id', upload.single('image'), authController.updateShopById);
+
+
+
+
+// Add Item
+router.post('/items/add', upload.single('image'), itemController.addItem);
 
 // Get All Items
 router.get('/items', itemController.getAllItems);
@@ -37,7 +42,6 @@ router.put('/items/:id', upload.single('image'), itemController.updateItemById);
 // Delete Item by ID
 router.delete('/items/:id', itemController.deleteItemById);
 
-// Update shop details
-router.post('/update', upload.single('shopLogo'), authController.updateShopDetails);
+
 
 module.exports = router;
