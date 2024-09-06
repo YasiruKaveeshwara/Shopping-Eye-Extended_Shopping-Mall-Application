@@ -78,6 +78,7 @@ export default function Shops() {
               <div key={shop._id} className="shop-card">
                 <h3>{shop.shopName}</h3>
                 <p>Owner: {shop.ownerName}</p>
+                <p>shopCategory: {shop.shopCategory}</p>
                 <p>Location: {shop.location}</p>
                 <p>Phone: {shop.phone}</p>
                 <p>Email: {shop.email}</p>

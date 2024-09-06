@@ -6,6 +6,7 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
   const [form, setForm] = useState({
     shopName: '',
     ownerName: '',
+    shopCategory: '',
     location: '',
     phone: '',
     shopLogo: null, // State for shop logo
@@ -24,6 +25,7 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
       setForm({
         shopName: shop.shopName || '',
         ownerName: shop.ownerName || '',
+        shopCategory: shop.shopCategory || '',
         location: shop.location || '',
         phone: shop.phone || '',
         shopLogo: null, // Reset shop logo state
@@ -73,8 +75,8 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
       setError('Passwords do not match.');
       return;
     }
-
-    if (!form.shopName || !form.ownerName || !form.location || !form.phone || !form.email) {
+    
+    if (!form.shopName || !form.ownerName || !form.shopCategory || !form.location || !form.phone || !form.email) {
       setError('Please fill in all required fields.');
       return;
     }
@@ -83,6 +85,7 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
       const formData = new FormData();
       formData.append('shopName', form.shopName);
       formData.append('ownerName', form.ownerName);
+      formData.append('shopCategory', form.shopCategory);
       formData.append('location', form.location);
       formData.append('phone', form.phone);
       formData.append('email', form.email);
@@ -145,6 +148,18 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
             type="text"
             name="ownerName"
             value={form.ownerName}
+            onChange={onUpdateField}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.formLabel}>Shop Category</label>
+          <input
+            className={styles.formField}
+            type="text"
+            name="shopCategory"
+            value={form.shopCategory}
             onChange={onUpdateField}
             required
           />

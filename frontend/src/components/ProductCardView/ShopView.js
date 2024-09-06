@@ -34,6 +34,8 @@ function ShopView({ shop, onEdit, onDelete, onWishlist }) {
       <p>
         Owner: {shop.ownerName}
         <br />
+        Shop Category: {shop.shopCategory}
+        <br />
         Email: {shop.email}
         <br />
         Location: {shop.location}

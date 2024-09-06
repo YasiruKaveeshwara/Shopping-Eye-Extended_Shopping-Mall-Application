@@ -11,13 +11,13 @@ const cloudinary = require('../config/cloudinary');
 exports.signup = async (req, res) => {
   console.log(req.body);
 console.log(req.file);
-  const { shopName, ownerName, location, phone, email, password } = req.body;
+  const { shopName, ownerName, shopCategory, location, phone, email, password } = req.body;
   const shopLogo = req.file;  // Get the uploaded image
 
 
   try {
     // Check if all required fields are provided
-    if (!shopName || !ownerName || !location || !phone || !email || !password) {
+    if (!shopName || !ownerName || !shopCategory || !location || !phone || !email || !password) {
       return res.status(400).json({ message: "Required fields are missing" });
     }
     let shopUrl = '';
@@ -42,6 +42,7 @@ console.log(req.file);
     const newShop = new Shop({
       shopName,
       ownerName,
+      shopCategory,
       location,
       phone,
       shopLogo: shopUrl, // Save only the URL here
@@ -88,6 +89,7 @@ exports.login = async (req, res) => {
       token,
       shopName: shop.shopName,
       ownerName: shop.ownerName,
+      shopCategory: shop.shopCategory,
       location: shop.location,
       phone: shop.phone,
      
@@ -155,7 +157,7 @@ exports.getShopById = (req, res) => {
 // Update Shop by ID Controller
 exports.updateShopById = async (req, res) => {
   const { id } = req.params;
-  const { shopName, ownerName, location, phone, email, password } = req.body;
+  const { shopName, ownerName, shopCategory, location, phone, email, password } = req.body;
   const image = req.file;  // Get the uploaded image
 
   try {
@@ -167,6 +169,7 @@ exports.updateShopById = async (req, res) => {
     // Update Shop details
     shop.shopName = shopName || shop.shopName;
     shop.ownerName = ownerName || shop.ownerName;
+    shop.shopCategory = shopCategory || shop.shopCategory;
     shop.location = location || shop.location;
     shop.phone = phone || shop.phone;
     shop.email = email || shop.email;
