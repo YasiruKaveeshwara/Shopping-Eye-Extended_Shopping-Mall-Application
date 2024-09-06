@@ -1,6 +1,35 @@
 import React, { useState, useRef, useEffect } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 import { Html5QrcodeScanner } from "html5-qrcode";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls } from "@react-three/drei";
+import * as THREE from "three";
+
+function Building() {
+  return (
+    <group position={[0, -2, 0]}>
+      <mesh>
+        <boxGeometry args={[3, 1, 3]} />
+        <meshStandardMaterial color={"#6aff00"} />
+      </mesh>
+      {/* First story */}
+      <mesh position={[0, 1, 0]}>
+        <boxGeometry args={[3, 1, 3]} />
+        <meshStandardMaterial color={"#312eff"} />
+      </mesh>
+      {/* Second story */}
+      <mesh position={[0, 2, 0]}>
+        <boxGeometry args={[3, 1, 3]} />
+        <meshStandardMaterial color={"#ff2929"} />
+      </mesh>
+      {/* Third story */}
+      <mesh position={[0, 3, 0]}>
+        <boxGeometry args={[3, 1, 3]} />
+        <meshStandardMaterial color={"#44ffff"} />
+      </mesh>
+    </group>
+  );
+}
 
 export default function ShopQR() {
   const [url, setUrl] = useState("");
@@ -74,6 +103,21 @@ export default function ShopQR() {
           <p>{scannedData}</p>
         </div>
       )}
+
+      {/* Add 3D building using three.js */}
+      <div style={{ width: "100%", height: "500px" }}>
+        <Canvas>
+          {/* Add lighting to the scene */}
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[5, 5, 5]} intensity={2} />
+
+          {/* Add the 3D building */}
+          <Building />
+
+          {/* OrbitControls to allow rotation */}
+          <OrbitControls enableZoom={true} />
+        </Canvas>
+      </div>
     </div>
   );
 }
