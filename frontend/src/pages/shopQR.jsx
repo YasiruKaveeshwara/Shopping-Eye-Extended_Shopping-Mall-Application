@@ -104,20 +104,7 @@ export default function ShopQR() {
         </div>
       )}
 
-      {/* Add 3D building using three.js */}
-      <div style={{ width: "100%", height: "500px" }}>
-        <Canvas>
-          {/* Add lighting to the scene */}
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[5, 5, 5]} intensity={2} />
-
-          {/* Add the 3D building */}
-          <Building />
-
-          {/* OrbitControls to allow rotation */}
-          <OrbitControls enableZoom={true} />
-        </Canvas>
-      </div>
+      
     </div>
   );
 }

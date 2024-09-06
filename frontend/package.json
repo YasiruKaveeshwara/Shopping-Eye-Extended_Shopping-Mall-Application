@@ -17,6 +17,7 @@
     "react-router-dom": "^6.26.0",
     "react-scripts": "^5.0.1",
     "three": "^0.168.0",
+    "three-stdlib": "^2.32.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

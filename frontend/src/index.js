@@ -10,6 +10,7 @@ import AddProducts from "./pages/AddProducts.js";
 import ProductDescription from "./pages/ProductDescription.js";
 import SignupDetails from './pages/SignupDetails';
 import ShopQR from "./pages/shopQR.jsx";
+import Map from "./pages/map.jsx";
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -29,6 +30,7 @@ ReactDOM.render(
         <Route path="/product/:id" element={<ProductDescription />} />
         <Route path="/profile" element={<SignupDetails />} />
         <Route path="/QR" element={<ShopQR />} />
+        <Route path="/map" element={<Map />} />
 
       </Routes>
       </AuthContextProvider>
