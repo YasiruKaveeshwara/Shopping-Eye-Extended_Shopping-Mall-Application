@@ -1,0 +1,86 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-image: url('../../images/sign.jpg'); /* Path to your image */
+  background-size: cover;
+  background-position: 99% 1%; /* Move image further to the right */
+  background-repeat: no-repeat;
+  padding: 20px;
+}
+.form {
+  background: #ffffff;
+  padding: 30px;
+  margin-right: 700px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 700px; /* Increased width */
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two equal columns */
+  gap: 20px; /* Space between columns */
+}
+
+.heading {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20px;
+  grid-column: span 2; /* Make heading span both columns */
+  text-align: center;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.formLabel {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.formField {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.formField:focus {
+  border-color: #16002e;
+}
+
+.formActions {
+  grid-column: span 2; /* Make actions span both columns */
+  text-align: center;
+  margin-top: 20px;
+}
+
+.formSubmitBtn {
+  background-color: #16002e;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.formSubmitBtn:hover {
+  background-color: #ff742f;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+  grid-column: span 2; /* Make error message span both columns */
+}
