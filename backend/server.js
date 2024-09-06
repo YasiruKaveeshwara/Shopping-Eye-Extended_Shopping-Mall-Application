@@ -13,10 +13,17 @@ app.use(bodyParser.json());
 
 const URL = process.env.MONGODB_URL;
 
-mongoose.connect(URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose
+  .connect(URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("MongoDB connection success!");
+  })
+  .catch((err) => {
+    console.error("MongoDB connection error:", err.message);
+  });
 
 const connection = mongoose.connection;
 connection.once("open", () => {
