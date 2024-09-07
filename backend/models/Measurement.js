@@ -17,26 +17,12 @@ const measurementSchema = new Schema({
         required: true
     },
 
-    shoulders: {
-        type: Number,
-        required: true
-    },
-    
-    height: {
-        type: Number,
-        required: true
-    },
-
-    weight: {
-        type: Number,
-        required: true
-    },
-
-    // bodyTypes: {
-    //     type: [String],  // Array to store all detected body types
+    // shoulders: {
+    //     type: Number,
+    //     required: true
     // },
 
-    finalBodyType: {
+    bodyType: {
         type: String
     }
 });

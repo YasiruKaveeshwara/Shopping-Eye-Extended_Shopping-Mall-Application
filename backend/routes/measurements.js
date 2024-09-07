@@ -5,20 +5,17 @@ const { determineBodyType } = require("../util/bodyTypeHelper"); // Import the h
 
 // Save Measurements
 router.route("/saveMeasurements").post((req, res) => {
-    const { bust, waist, hip, shoulders, height, weight  } = req.body;
+    const { bust, waist, hip} = req.body;
 
     // Determine body type
-    const { bodyTypes, finalBodyType } = determineBodyType({ bust, waist, hip, shoulders, height, weight });
+    const bodyType = determineBodyType({ bust, waist, hip});
 
     const newMeasurement = new Measurement({
         bust,
         waist,
         hip, 
-        shoulders, 
-        height,
-        weight,
-        bodyTypes, // Store all detected body types
-        finalBodyType // Store the most frequent body type
+        // shoulders, 
+        bodyType
     });
 
     newMeasurement.save()

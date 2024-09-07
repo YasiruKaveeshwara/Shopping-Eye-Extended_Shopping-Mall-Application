@@ -80,8 +80,8 @@ const MeasurementsTable = () => {
               <th className="px-5 py-3 border-b-2 border-gray-200">Bust</th>
               <th className="px-5 py-3 border-b-2 border-gray-200">Waist</th>
               <th className="px-5 py-3 border-b-2 border-gray-200">Hip</th>
-              <th className="px-5 py-3 border-b-2 border-gray-200">BodyTypes</th>
-              <th className="px-5 py-3 border-b-2 border-gray-200">FinalBodyTypes</th>
+              {/* <th className="px-5 py-3 border-b-2 border-gray-200">Shoulders</th> */}
+              <th className="px-5 py-3 border-b-2 border-gray-200">BodyType</th>
             </tr>
           </thead>
           <tbody>
@@ -91,8 +91,8 @@ const MeasurementsTable = () => {
         <td className="px-5 py-2">{measurement.bust}</td>
         <td className="px-5 py-2">{measurement.waist}</td>
         <td className="px-5 py-2">{measurement.hip}</td>
-        <td className="px-5 py-2">{measurement.bodyTypes}</td>
-        <td className="px-5 py-2">{measurement.finalBodyType}</td>
+        {/* <td className="px-5 py-2">{measurement.shoulders}</td> */}
+        <td className="px-5 py-2">{measurement.bodyType}</td>
         <td>
               <Link to={`/updateMyMeasurements/${measurement._id}`} className="flex items-center text-white text-xl font-mclaren px-3 py-1  bg-blue-500 hover:bg-blue-800   rounded-3xl">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mr-1">

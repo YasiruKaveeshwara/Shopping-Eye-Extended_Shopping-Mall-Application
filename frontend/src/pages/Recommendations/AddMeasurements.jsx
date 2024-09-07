@@ -12,9 +12,8 @@ const AddMeasurements = () => {
   const [bust, setBust] = useState("");
   const [waist, setWaist] = useState("");
   const [hip, setHip] = useState("");
-  const [shoulders, setShoulders] = useState("");
-  const [height, setHeight] = useState("");
-  const [weight, setWeight] = useState("");
+  //const [shoulders, setShoulders] = useState("");
+
 
   
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -37,15 +36,10 @@ const AddMeasurements = () => {
         case 'hip':
             if (value < 1) return "Enter Hip";
             return "";
-        case 'shoulders':
-            if (value < 1) return "Enter Shoulders";
-            return "";
-        case 'height':
-            if (value < 1) return "Enter Height";
-            return "";
-        case 'weight':
-            if (value < 1) return "Enter Weight";
-            return "";
+        // case 'shoulders':
+        //     if (value < 1) return "Enter Shoulders";
+        //     return "";
+        
         default:
             return "";
     }
@@ -68,15 +62,9 @@ function handleInputChange(e) {
       case 'hip':
           setHip(value);
           break;
-      case 'shoulders':
-          setShoulders(value);
-          break;
-      case 'height':
-          setHeight(value);
-          break;
-      case 'weight':
-          setWeight(value);
-          break;
+      // case 'shoulders':
+      //     setShoulders(value);
+      //     break;
       default:
           break;
   }
@@ -102,10 +90,9 @@ function sendData(e) {
   const newMeasurements = {
       bust,
       waist,
-      hip,
-      shoulders,
-      height,
-      weight
+      hip
+      //shoulders
+
     }
 
     axios.post("http://localhost:3050/measurement/saveMeasurements", newMeasurements)
@@ -119,9 +106,8 @@ function sendData(e) {
         setBust("");
         setWaist("");
         setHip("");
-        setShoulders("");
-        setHeight("");
-        setWeight("");
+        //setShoulders("");
+
 
         
     }).catch((err) => {
@@ -196,36 +182,16 @@ function sendData(e) {
 
 
       {/* User shoulders */}
-      <div className="ml-30 text-base font-semibold mt-5">
+      {/* <div className="ml-30 text-base font-semibold mt-5">
         <label className="block font-bold text-xl text-blue-800" htmlFor="shoulders">Shoulders</label>
         <input className="w-full p-1 border border-gray-200 rounded text-lg font-lexend form-check"
           type="number" placeholder="Enter Shoulders" name="shoulders" value={shoulders}
           onChange={handleInputChange}
         />
         {errors.shoulders && <div className="text-red-600">{errors.shoulders}</div>}
-      </div>
+      </div> */}
 
 
-      {/* User height */}
-      <div className="ml-30 text-base font-semibold mt-5">
-        <label className="block font-bold text-xl text-blue-800" htmlFor="height">Height</label>
-        <input className="w-full p-1 border border-gray-200 rounded text-lg font-lexend form-check"
-          type="number" placeholder="Enter Height" name="height" value={height}
-          onChange={handleInputChange}
-        />
-        {errors.height && <div className="text-red-600">{errors.height}</div>}
-      </div>
-
-
-      {/* User weight */}
-      <div className="ml-30 text-base font-semibold mt-5">
-        <label className="block font-bold text-xl text-blue-800" htmlFor="weight">Weight</label>
-        <input className="w-full p-1 border border-gray-200 rounded text-lg font-lexend form-check"
-          type="number" placeholder="Enter Weight" name="weight" value={weight}
-          onChange={handleInputChange}
-        />
-        {errors.weight && <div className="text-red-600">{errors.weight}</div>}
-      </div>
 
 
       

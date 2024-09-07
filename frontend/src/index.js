@@ -11,6 +11,7 @@ import ProductDescription from "./pages/ProductDescription.js";
 import SignupDetails from './pages/SignupDetails';
 import AddMeasurements from './pages/Recommendations/AddMeasurements.jsx';
 import UpdateMeasurements from './pages/Recommendations/UpdateMeasurements.jsx';
+import TestPage from './pages/Recommendations/TestPage.jsx';
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -31,7 +32,8 @@ ReactDOM.render(
         <Route path="/product/:id" element={<ProductDescription />} />
         <Route path="/profile" element={<SignupDetails />} />
         <Route path="/" element={<AddMeasurements />} />
-        <Route path='/updateMyMeasurements/:measurementsId' element={<UpdateMeasurements />} /> 
+        <Route path='/updateMyMeasurements/:measurementsId' element={<UpdateMeasurements />} />
+        <Route path="/" element={<TestPage />} />
 
       </Routes>
       </AuthContextProvider>
