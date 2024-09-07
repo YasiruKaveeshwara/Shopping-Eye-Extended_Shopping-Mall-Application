@@ -10,6 +10,7 @@ import AddProducts from "./pages/AddProducts.js";
 import ProductDescription from "./pages/ProductDescription.js";
 import SignupDetails from './pages/SignupDetails';
 import AddMeasurements from './pages/Recommendations/AddMeasurements.jsx';
+import ListMeasurements from './pages/Recommendations/ListMeasurements.jsx';
 import UpdateMeasurements from './pages/Recommendations/UpdateMeasurements.jsx';
 import TestPage from './pages/Recommendations/TestPage.jsx';
 
@@ -31,9 +32,10 @@ ReactDOM.render(
         <Route path='/addproducts' element={<AddProducts />} /> 
         <Route path="/product/:id" element={<ProductDescription />} />
         <Route path="/profile" element={<SignupDetails />} />
-        <Route path="/" element={<AddMeasurements />} />
+        <Route path="/addMeasurements" element={<AddMeasurements />} />
+        <Route path="/listMeasurements" element={<ListMeasurements />} />
         <Route path='/updateMyMeasurements/:measurementsId' element={<UpdateMeasurements />} />
-        <Route path="/" element={<TestPage />} />
+        <Route path="/d" element={<TestPage />} />
 
       </Routes>
       </AuthContextProvider>

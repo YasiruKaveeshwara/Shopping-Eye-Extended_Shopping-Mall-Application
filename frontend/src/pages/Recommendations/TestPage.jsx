@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom"
 import { Link } from "react-router-dom"
 import bgblue from '../../../src/assets/recommendations/bgblue1.jpg'; // Background image
 import CustomPopup from '../Recommendations/Components/CustomPopup'; // Modal component
+import Carousel from '../Recommendations/Components/Carousel'; // Modal component
 import ListMeasurements from '../Recommendations/ListMeasurements'
-import bustGuide from '../../../src/assets/recommendations/bust_guide.jpg'; // Image for Bust measurement guide
-import waistGuide from '../../../src/assets/recommendations/waist_guide.jpg'; // Image for Waist measurement guide
-import hipGuide from '../../../src/assets/recommendations/hip_guide.jpg'; // Image for Hip measurement guide
+import bustGuide from '../../../src/assets/recommendations/christmas5.jpg'; // Image for Bust measurement guide
+import waistGuide from '../../../src/assets/recommendations/birthday4.jpg'; // Image for Waist measurement guide
+import hipGuide from '../../../src/assets/recommendations/christmas3.jpg'; // Image for Hip measurement guide
 
 const TestPage = () => {
   const [bust, setBust] = useState("");
@@ -18,6 +19,9 @@ const TestPage = () => {
   const [popupType, setPopupType] = useState('info'); // 'info' or 'error'
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+
+
+  const images = [bustGuide, waistGuide, hipGuide];
 
   function validateInput(name, value) {
     switch (name) {
@@ -106,66 +110,131 @@ const TestPage = () => {
       ></div>
 
       {/* Content Wrapper */}
+      
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen">
-        <div className="container my-10 max-w-3xl mx-auto p-10 bg-secondary-blue opacity-90 shadow-2xl shadow-blue-400 rounded-[50px] overflow-auto font-lexend">
-          <div className="text-5xl font-extrabold ...">
+        <div className="container my-10 max-w-5xl mx-auto p-10 bg-white opacity-90 shadow-2xl shadow-blue-400 rounded-[5px] overflow-auto font-lexend">
+            
+        <div className="text-5xl font-extrabold ...">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-800 to-black justify-center">
               Enter Measurements
             </span>
           </div>
 
-          <form className="mt-3" onSubmit={sendData}>
-            {/* Measurement Guides Section */}
-            <div className="mt-5">
-              <h2 className="text-2xl font-bold text-blue-800">How to Take Your Measurements</h2>
-              <div className="mt-5">
-                <h3 className="text-xl font-semibold">Bust</h3>
-                <img src={bustGuide} alt="Bust Measurement Guide" className="w-full max-w-md rounded shadow-md" />
-                <p className="mt-2 text-gray-700">Measure around the fullest part of your bust, keeping the tape level and snug but not tight.</p>
-              </div>
-              <div className="mt-5">
-                <h3 className="text-xl font-semibold">Waist</h3>
-                <img src={waistGuide} alt="Waist Measurement Guide" className="w-full max-w-md rounded shadow-md" />
-                <p className="mt-2 text-gray-700">Measure around the narrowest part of your waist, usually just above your belly button.</p>
-              </div>
-              <div className="mt-5">
-                <h3 className="text-xl font-semibold">Hip</h3>
-                <img src={hipGuide} alt="Hip Measurement Guide" className="w-full max-w-md rounded shadow-md" />
-                <p className="mt-2 text-gray-700">Measure around the widest part of your hips, keeping the tape level and snug but not tight.</p>
-              </div>
-            </div>
+        <form className="mt-3" onSubmit={sendData}>
 
-            {/* User bust */}
-            <div className="ml-30 text-base font-semibold mt-5">
-              <label className="block font-bold text-xl text-blue-800" htmlFor="bust">Bust</label>
-              <input className="w-full p-1 border border-gray-200 rounded text-lg font-lexend form-check"
+{/* Measurement Box 1*/}
+        <div className="grid grid-cols-2 gap-16 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 mt-4 mb-4">
+    <div className="container shadow-md rounded-md overflow-hidden w-full max-h-80">
+
+      <Carousel images={images} />
+
+    </div>
+        <div className="px-0 py-2">
+
+            {/* with Lexend font */}
+            <h1 className="text-xl font-bold text-green-800 font-inika">Bust Measurement</h1>
+            <h6 className="flex items-center text-sm text-gray-600 font-lexend">
+Step 2: Stand straight with your feet together, keeping your arms relaxed at your sides.<br /><br />
+Step 3: Wrap a measuring tape around the fullest part of your bust, typically across your nipples and around your back. Ensure the tape is parallel to the ground and lies flat against your body.<br /><br />
+Step 4: Make sure the tape is snug but not tight — it should not compress your chest. Take a deep breath in and out, then note the measurement where the end of the tape meets the rest.<br /><br /></h6>
+            <div className="flex  mt-2">
+            <label className="block font-bold text-lg text-blue-800 mr-3" htmlFor="bust">Bust</label>
+              <input className="w-28 p-1 border border-gray-200 rounded text-base font-lexend form-check"
                 type="number" placeholder="Enter Bust" name="bust" value={bust}
                 onChange={handleInputChange}
               />
-              {errors.bust && <div className="text-red-600">{errors.bust}</div>}
+              <p className="flex items-center text-base font-bold text-green-600 pr-12 ml-3">cm</p>
             </div>
+            {errors.bust && <div className="text-red-600">{errors.bust}</div>}
 
-            {/* User Waist */}
-            <div className="ml-30 text-base font-semibold mt-5">
-              <label className="block font-bold text-xl text-blue-800" htmlFor="waist">Waist</label>
-              <input className="w-full p-1 border border-gray-200 rounded text-lg font-lexend form-check"
+                   
+        </div>  
+  
+      </div>
+      {/* Measurement Box 1 Ends*/}
+
+<hr></hr>
+
+      {/* Measurement Box 2 */}
+      <div className="grid grid-cols-2 gap-16 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 mt-4 mb-4" >
+    <div className="container shadow-md rounded-md overflow-hidden w-full max-h-80">
+    <Carousel images={images} />
+    </div>
+        <div className="px-0 py-4">
+
+
+            
+            {/* Event Date with Lexend font */}
+            <h1 className="text-xl font-bold text-green-800 font-inika">Waist Measurement</h1>
+            <h6 className="flex items-center text-sm text-gray-600 font-lexend">
+Step 2: Stand straight with your feet together, keeping your arms relaxed at your sides.<br /><br />
+Step 3: Wrap a measuring tape around the fullest part of your bust, typically across your nipples and around your back. Ensure the tape is parallel to the ground and lies flat against your body.<br /><br />
+Step 4: Make sure the tape is snug but not tight — it should not compress your chest. Take a deep breath in and out, then note the measurement where the end of the tape meets the rest.<br /><br /></h6>
+            
+
+            <div className="flex  mt-2">
+            <label className="block font-bold text-lg text-blue-800 mr-3" htmlFor="waist">Waist</label>
+              <input className="w-28 p-1 border border-gray-200 rounded text-base font-lexend form-check"
                 type="number" placeholder="Enter Waist" name="waist" value={waist}
                 onChange={handleInputChange}
               />
-              {errors.waist && <div className="text-red-600">{errors.waist}</div>}
-            </div>
+             
 
-            {/* User Hip */}
-            <div className="ml-30 text-base font-semibold mt-5">
-              <label className="block font-bold text-xl text-blue-800" htmlFor="hip">Hip</label>
-              <input className="w-full p-1 border border-gray-200 rounded text-lg font-lexend form-check"
+              <p className="flex items-center text-base font-bold text-green-600 pr-12 ml-3">cm</p>
+              
+            </div>
+            {errors.waist && <div className="text-red-600">{errors.waist}</div>}
+  
+           
+  
+            
+                      
+        </div>  
+        
+  
+      </div>
+      {/* Measurement Box 2 Ends*/}
+
+<hr></hr>
+      {/* Measurement Box 3*/}
+      <div className="grid grid-cols-2 gap-16 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 mt-4 mb-4">
+    <div className="container shadow-md rounded-md overflow-hidden w-full max-h-80">
+    <Carousel images={images} />
+    </div>
+        <div className="px-0 py-4">
+
+            
+            
+            {/* with Lexend font */}
+            <h1 className="text-xl font-bold text-green-800 font-inika">Hip Measurement</h1>
+            <h6 className="flex items-center text-sm text-gray-600 font-lexend">
+Step 2: Stand straight with your feet together, keeping your arms relaxed at your sides.<br /><br />
+Step 3: Wrap a measuring tape around the fullest part of your bust, typically across your nipples and around your back. Ensure the tape is parallel to the ground and lies flat against your body.<br /><br />
+Step 4: Make sure the tape is snug but not tight — it should not compress your chest. Take a deep breath in and out, then note the measurement where the end of the tape meets the rest.<br /><br /></h6>
+
+            <div className="flex  mt-2">
+            <label className="block font-bold text-lg text-blue-800 mr-3" htmlFor="hip">Hip</label>
+              <input className="w-28 p-1 border border-gray-200 rounded text-base font-lexend form-check"
                 type="number" placeholder="Enter Hip" name="hip" value={hip}
                 onChange={handleInputChange}
               />
-              {errors.hip && <div className="text-red-600">{errors.hip}</div>}
-            </div>
+              
 
-            <center>
+              <p className="flex items-center text-base font-bold text-green-600 pr-12 ml-3">cm</p>
+            </div>
+            {errors.hip && <div className="text-red-600">{errors.hip}</div>}
+  
+  
+            
+            
+                      
+        </div>  
+        
+  
+      </div>
+      {/* Measurement Box 3 Ends*/}
+
+      <center>
               <br />
               <div className="flex justify-center mt-5">
                 <button className="flex items-center bg-blue-700 text-white text-lg px-6 py-2 border border-blue-800 rounded-full cursor-pointer font-bold hover:bg-blue-400 hover:border-blue-950" type="submit" name="submit" id="submit">
@@ -181,10 +250,13 @@ const TestPage = () => {
                 </Link>
               </div>
             </center>
-          </form>
+      </form>
+      <CustomPopup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} message={popupMessage} type={popupType} />
+
+         
         </div>
       </div>
-      <CustomPopup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} message={popupMessage} type={popupType} />
+
       <ListMeasurements />
     </div>
   );
