@@ -12,6 +12,7 @@ const UpdateProfilePage = () => {
   const [gender, setGender] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [deleteStatus, setDeleteStatus] = useState(""); // State for delete status
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -57,9 +58,29 @@ const UpdateProfilePage = () => {
     }
   };
 
-  const handleGoBack = () => {
-    navigate("/profile");
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete your profile? This action cannot be undone."
+    );
+    if (confirmDelete) {
+      try {
+        const token = localStorage.getItem("token");
+        await axios.delete("http://localhost:3050/api/auth/delete", {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setDeleteStatus("Profile deleted successfully!");
+        localStorage.removeItem("token");
+        navigate("/login");
+      } catch (err) {
+        console.error("Error deleting profile:", err);
+        setDeleteStatus("Failed to delete profile.");
+      }
+    }
   };
+
+  // const handleGoBack = () => {
+  //   navigate("/profile");
+  // };
 
   return (
     <div className="flex">
@@ -67,18 +88,21 @@ const UpdateProfilePage = () => {
       <div className="flex-grow min-h-screen bg-gray-100 p-8">
         <div className="max-w-4xl mx-auto bg-white p-8 shadow-lg rounded-lg">
           <div className="flex items-center mb-6">
-            <button
+            {/* <button
               onClick={handleGoBack}
               className="text-blue-500 hover:text-blue-700 focus:outline-none"
             >
               <HiArrowLeft size={24} />
-            </button>
+            </button> */}
             <h2 className="text-2xl font-bold text-center flex-grow">
               Update Profile
             </h2>
           </div>
           {error && <p className="text-red-500 text-center">{error}</p>}
           {success && <p className="text-green-500 text-center">{success}</p>}
+          {deleteStatus && (
+            <p className="text-red-500 text-center">{deleteStatus}</p>
+          )}
 
           <form onSubmit={handleUpdate} className="grid grid-cols-2 gap-6">
             {/* Email */}
@@ -175,12 +199,19 @@ const UpdateProfilePage = () => {
               </select>
             </div>
 
-            <div className="col-span-2 flex justify-end mt-6">
+            <div className="col-span-2 flex justify-between mt-6 gap-5">
               <button
                 type="submit"
                 className="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-600"
               >
                 Update Profile
+              </button>
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="bg-red-500 text-white w-full py-2 rounded hover:bg-red-600"
+              >
+                Delete Profile
               </button>
             </div>
           </form>
