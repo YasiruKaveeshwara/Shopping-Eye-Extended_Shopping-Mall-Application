@@ -1,17 +1,17 @@
-// src/components/UpdateProfilePage.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { HiArrowLeft } from "react-icons/hi"; // Importing an arrow icon from react-icons
-import Header from "./Header"; // Import Header component
+import ProfileSideBar from "./ProfileSideBar";
+import { HiArrowLeft } from "react-icons/hi";
 
 const UpdateProfilePage = () => {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [birthday, setBirthday] = useState("");
+  const [gender, setGender] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [searchQuery, setSearchQuery] = useState(""); // Add state for search query
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,6 +28,10 @@ const UpdateProfilePage = () => {
         setEmail(response.data.email);
         setFirstName(response.data.firstName);
         setLastName(response.data.lastName);
+        setBirthday(
+          new Date(response.data.birthday).toISOString().split("T")[0]
+        );
+        setGender(response.data.gender);
       } catch (err) {
         console.error("Error fetching user data:", err);
         setError("Failed to load user data.");
@@ -42,34 +46,14 @@ const UpdateProfilePage = () => {
       const token = localStorage.getItem("token");
       await axios.put(
         "http://localhost:3050/api/auth/update",
-        { email, firstName, lastName },
+        { email, firstName, lastName, birthday, gender },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setSuccess("Profile updated successfully!");
-      setError(""); // Clear any previous errors
+      setError("");
     } catch (err) {
       console.error("Error updating profile:", err);
       setError("Failed to update profile.");
-    }
-  };
-
-  const handleDeleteAccount = async () => {
-    if (
-      window.confirm(
-        "Are you sure you want to delete your account? This action cannot be undone."
-      )
-    ) {
-      try {
-        const token = localStorage.getItem("token");
-        await axios.delete("http://localhost:3050/api/auth/delete", {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        localStorage.removeItem("token");
-        navigate("/login"); // Redirect to login page after account deletion
-      } catch (err) {
-        console.error("Error deleting account:", err);
-        setError("Failed to delete account.");
-      }
     }
   };
 
@@ -77,20 +61,11 @@ const UpdateProfilePage = () => {
     navigate("/profile");
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    console.log("Search query:", searchQuery);
-  };
-
   return (
-    <div className="bg-gray-100">
-      <Header
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        handleSearch={handleSearch}
-      />
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+    <div className="flex">
+      <ProfileSideBar />
+      <div className="flex-grow min-h-screen bg-gray-100 p-8">
+        <div className="max-w-4xl mx-auto bg-white p-8 shadow-lg rounded-lg">
           <div className="flex items-center mb-6">
             <button
               onClick={handleGoBack}
@@ -104,7 +79,9 @@ const UpdateProfilePage = () => {
           </div>
           {error && <p className="text-red-500 text-center">{error}</p>}
           {success && <p className="text-green-500 text-center">{success}</p>}
-          <form onSubmit={handleUpdate} className="space-y-4">
+
+          <form onSubmit={handleUpdate} className="grid grid-cols-2 gap-6">
+            {/* Email */}
             <div>
               <label
                 htmlFor="email"
@@ -118,9 +95,11 @@ const UpdateProfilePage = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
               />
             </div>
+
+            {/* First Name */}
             <div>
               <label
                 htmlFor="firstName"
@@ -134,9 +113,11 @@ const UpdateProfilePage = () => {
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
               />
             </div>
+
+            {/* Last Name */}
             <div>
               <label
                 htmlFor="lastName"
@@ -150,26 +131,59 @@ const UpdateProfilePage = () => {
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 required
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
               />
             </div>
-            <div className="flex items-center justify-between">
+
+            {/* Birthday */}
+            <div>
+              <label
+                htmlFor="birthday"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Birthday
+              </label>
+              <input
+                id="birthday"
+                type="date"
+                value={birthday}
+                onChange={(e) => setBirthday(e.target.value)}
+                required
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              />
+            </div>
+
+            {/* Gender */}
+            <div>
+              <label
+                htmlFor="gender"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Gender
+              </label>
+              <select
+                id="gender"
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                required
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div className="col-span-2 flex justify-end mt-6">
               <button
                 type="submit"
-                className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="bg-blue-500 text-white w-full py-2 rounded hover:bg-blue-600"
               >
                 Update Profile
               </button>
             </div>
           </form>
-          <div className="mt-6">
-            <button
-              onClick={handleDeleteAccount}
-              className="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-            >
-              Delete Account
-            </button>
-          </div>
         </div>
       </div>
     </div>

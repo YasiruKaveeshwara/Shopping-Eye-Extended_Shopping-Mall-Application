@@ -7,7 +7,7 @@ const router = express.Router();
 
 // Register route
 router.post("/register", async (req, res) => {
-  const { email, password, firstName, lastName } = req.body;
+  const { email, password, firstName, lastName, birthday, gender } = req.body;
 
   try {
     console.log(`Attempting to register user with email: ${email}`);
@@ -19,7 +19,7 @@ router.post("/register", async (req, res) => {
     if (user) return res.status(400).json({ msg: "User already exists" });
 
     // Create new user
-    user = new User({ email, password, firstName, lastName });
+    user = new User({ email, password, firstName, lastName, birthday, gender });
 
     // Hash password
     const salt = await bcrypt.genSalt(10);
@@ -91,7 +91,7 @@ router.get("/me", authMiddleware, async (req, res) => {
 
 // Update user profile
 router.put("/update", authMiddleware, async (req, res) => {
-  const { email, password, firstName, lastName } = req.body;
+  const { email, password, firstName, lastName, birthday, gender } = req.body;
 
   try {
     const user = await User.findById(req.user.id);
@@ -101,6 +101,8 @@ router.put("/update", authMiddleware, async (req, res) => {
     if (email) user.email = email;
     if (firstName) user.firstName = firstName;
     if (lastName) user.lastName = lastName;
+    if (birthday) user.birthday = birthday;
+    if (gender) user.gender = gender;
 
     // Update password if provided
     if (password) {

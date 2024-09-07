@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Header from "./Header";
+import ProfileSideBar from "./ProfileSideBar";
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
-  const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,63 +28,53 @@ const ProfilePage = () => {
     fetchUserData();
   }, [navigate]);
 
-  const handleUpdateProfile = () => {
-    navigate("/update-profile");
-  };
-
-  const handleChangePassword = () => {
-    navigate("/change-password");
-  };
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    console.log("Search query:", searchQuery);
-  };
-
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* <Header
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        handleSearch={handleSearch}
-      /> */}
-      <div className="flex justify-center items-center min-h-screen bg-gray-100">
-        <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-          <h2 className="text-2xl font-bold text-center">Profile</h2>
+    <div className="flex">
+      <ProfileSideBar />
+      <div className="flex-grow min-h-screen bg-gray-100 p-8">
+        <div className="max-w-4xl mx-auto bg-white p-8 shadow-lg rounded-lg">
+          <h2 className="text-3xl font-semibold mb-6 text-gray-800">
+            My Profile
+          </h2>
+
           {error && <p className="text-red-500 text-center">{error}</p>}
+
           {user ? (
-            <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-8">
+              {/* Full Name */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Email
+                  Full Name
+                </label>
+                <p className="mt-1 text-gray-900">
+                  {user.firstName} {user.lastName}
+                </p>
+              </div>
+
+              {/* Email */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Email Address
                 </label>
                 <p className="mt-1 text-gray-900">{user.email}</p>
               </div>
+
+              {/* Birthday */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  First Name
+                  Birthday
                 </label>
-                <p className="mt-1 text-gray-900">{user.firstName}</p>
+                <p className="mt-1 text-gray-500">
+                  {new Date(user.birthday).toISOString().split("T")[0]}
+                </p>
               </div>
+
+              {/* Gender */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Last Name
+                  Gender
                 </label>
-                <p className="mt-1 text-gray-900">{user.lastName}</p>
-              </div>
-              <div className="flex flex-col space-y-4 mt-8">
-                <button
-                  onClick={handleUpdateProfile}
-                  className="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  Update Profile
-                </button>
-                <button
-                  onClick={handleChangePassword}
-                  className="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
-                  Change Password
-                </button>
+                <p className="mt-1 text-gray-500">{user.gender}</p>
               </div>
             </div>
           ) : (

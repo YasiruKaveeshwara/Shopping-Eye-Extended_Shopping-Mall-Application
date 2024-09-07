@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "./Header"; // Adjust the path based on your folder structure
 
 const ShopsListPage = () => {
   const [shops, setShops] = useState([]);
@@ -34,13 +33,13 @@ const ShopsListPage = () => {
 
     // Filter by category
     if (selectedCategory && selectedCategory !== "All") {
-      result = result.filter((shop) => shop.category === selectedCategory);
+      result = result.filter((shop) => shop.shopCategory === selectedCategory);
     }
 
     // Filter by location (first digit of the location number)
     if (selectedLocation && selectedLocation !== "All") {
       result = result.filter((shop) => {
-        const firstDigit = String(shop.location).charAt(0);
+        const firstDigit = String(shop.location).charAt(1);
         return firstDigit === selectedLocation;
       });
     }
@@ -60,8 +59,8 @@ const ShopsListPage = () => {
     filterShops();
   };
 
-  const handleCategoryChange = (e) => {
-    setSelectedCategory(e.target.value);
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
   };
 
   const handleLocationChange = (e) => {
@@ -69,69 +68,110 @@ const ShopsListPage = () => {
   };
 
   const handleShopClick = (id) => {
-    navigate(`/shop/${id}`); // Navigate to the shop profile page
+    navigate(`/shops/${id}`); // Navigate to the shop profile page
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* <Header
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        handleSearch={handleSearch}
-      /> */}
-      <div className="container mx-auto p-6">
+    <div className="flex ">
+      {/* Left Sidebar Filter Options */}
+      <div className="w-1/6 pl-16 pt-10 border-r">
+        <h2 className="text-xl font-bold mb-4">Filters</h2>
+        {/* Category Filter */}
+        <div className="mb-6">
+          <h3 className="font-semibold mb-2">Category</h3>
+          <ul>
+            <li>
+              <button
+                className={`block mb-2 ${
+                  selectedCategory === "All" ? "text-orange-500" : ""
+                }`}
+                onClick={() => handleCategoryChange("All")}
+              >
+                All
+              </button>
+            </li>
+            <li>
+              <button
+                className={`block mb-2 ${
+                  selectedCategory === "SkinCare" ? "text-orange-500" : ""
+                }`}
+                onClick={() => handleCategoryChange("SkinCare")}
+              >
+                SkinCare
+              </button>
+            </li>
+            <li>
+              <button
+                className={`block mb-2 ${
+                  selectedCategory === "Clothing" ? "text-orange-500" : ""
+                }`}
+                onClick={() => handleCategoryChange("Clothing")}
+              >
+                Clothing
+              </button>
+            </li>
+            <li>
+              <button
+                className={`block mb-2 ${
+                  selectedCategory === "Footwear" ? "text-orange-500" : ""
+                }`}
+                onClick={() => handleCategoryChange("Footwear")}
+              >
+                Footwear
+              </button>
+            </li>
+            <li>
+              <button
+                className={`block mb-2 ${
+                  selectedCategory === "Stationary" ? "text-orange-500" : ""
+                }`}
+                onClick={() => handleCategoryChange("Stationary")}
+              >
+                Stationary
+              </button>
+            </li>
+            {/* Add more categories here */}
+          </ul>
+        </div>
+        {/* Location Filter */}
+        <div className="mb-6">
+          <h3 className="font-semibold mb-2">Location</h3>
+          <select
+            id="location"
+            value={selectedLocation}
+            onChange={handleLocationChange}
+            style={{ width: "100px" }} // Custom width
+            className="mt-1 block px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          >
+            <option value="All">All</option>
+            <option value="1">Level 1</option>
+            <option value="2">Level 2</option>
+            <option value="3">Level 3</option>
+            {/* Add more levels as needed */}
+          </select>
+        </div>
+      </div>
+
+      {/* Right Side - Shops List */}
+      <div className="w-3/4 p-6">
         <h1 className="text-3xl font-bold mb-6">All Shops</h1>
 
-        {/* Filter Options */}
-        <div className="mb-4 flex space-x-4">
-          <div style={{ maxWidth: "150px" }}>
-            <label
-              htmlFor="category"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Filter by shop category
-            </label>
-            <select
-              id="category"
-              value={selectedCategory}
-              onChange={handleCategoryChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            >
-              <option value="All">All</option>
-              <option value="Electronics">Electronics</option>
-              <option value="Food & Beverage">Food & Beverage</option>
-              <option value="Health & Fitness">Health & Fitness</option>
-              <option value="Books">Books</option>
-              <option value="Home & Garden">Home & Garden</option>
-              <option value="Clothing">Clothing</option>
-              <option value="Beauty">Beauty</option>
-              <option value="Pets">Pets</option>
-              <option value="Sports">Sports</option>
-              {/* Add more categories here as needed */}
-            </select>
-          </div>
-
-          <div style={{ maxWidth: "150px" }}>
-            <label
-              htmlFor="location"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Filter by shop location
-            </label>
-            <select
-              id="location"
-              value={selectedLocation}
-              onChange={handleLocationChange}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            >
-              <option value="All">All</option>
-              <option value="1">Level 1 (e.g., 101, 103)</option>
-              <option value="2">Level 2 (e.g., 205, 234)</option>
-              <option value="3">Level 3 (e.g., 301, 303)</option>
-              {/* Add more levels as needed */}
-            </select>
-          </div>
-        </div>
+        {/* Search Bar */}
+        {/* <form onSubmit={handleSearch} className="mb-6 flex space-x-4 ">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search shops..."
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+          />
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          >
+            Search
+          </button>
+        </form> */}
 
         <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredShops.map((shop) => (
@@ -140,9 +180,25 @@ const ShopsListPage = () => {
               className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
               onClick={() => handleShopClick(shop._id)} // Add click handler
             >
-              <h2 className="text-2xl font-semibold mb-2">{shop.shopName}</h2>
-              <p className="text-gray-700">Location: {shop.location}</p>
-              <p className="text-gray-700">Category: {shop.category}</p>
+              <div className="flex items-center mb-4">
+                {/* Display the shop logo */}
+                {shop.shopLogo && (
+                  <img
+                    src={shop.shopLogo}
+                    alt={`${shop.shopName} logo`}
+                    className="w-24 h-24 object-cover rounded-full mr-4"
+                  />
+                )}
+                <div>
+                  <h2 className="text-2xl font-semibold mb-2">
+                    {shop.shopName}
+                  </h2>
+                  <p className="text-gray-700">Location: {shop.location}</p>
+                  <p className="text-gray-700">Category: {shop.shopCategory}</p>
+                  <p className="text-gray-700">Phone: {shop.phone}</p>
+                  <p className="text-gray-700">Email: {shop.email}</p>
+                </div>
+              </div>
             </li>
           ))}
         </ul>

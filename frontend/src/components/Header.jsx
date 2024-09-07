@@ -1,19 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Header = ({ searchQuery, setSearchQuery }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated } = useContext(AuthContext);
   const location = useLocation();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token); // Set true if token exists, otherwise false
-  }, []);
-
   const handleSearch = (e) => {
     e.preventDefault();
-    navigate(`/search?query=${searchQuery}`); // Fixed template literal
+    navigate(`/search?query=${searchQuery}`);
   };
 
   const isActive = (path) => location.pathname.startsWith(path);
@@ -30,7 +26,7 @@ const Header = ({ searchQuery, setSearchQuery }) => {
             to="/home"
             className={`${
               isActive("/home") ? "text-orange-500" : "text-gray-800"
-            } hover:text-orange-500`} // Fixed className syntax
+            } hover:text-orange-500`}
           >
             Home
           </Link>
@@ -38,7 +34,7 @@ const Header = ({ searchQuery, setSearchQuery }) => {
             to="/shops"
             className={`${
               isActive("/shops") ? "text-orange-500" : "text-gray-800"
-            } hover:text-orange-500`} // Fixed className syntax
+            } hover:text-orange-500`}
           >
             Shops
           </Link>
@@ -46,7 +42,7 @@ const Header = ({ searchQuery, setSearchQuery }) => {
             to="/items"
             className={`${
               isActive("/items") ? "text-orange-500" : "text-gray-800"
-            } hover:text-orange-500`} // Fixed className syntax
+            } hover:text-orange-500`}
           >
             Items
           </Link>
@@ -54,7 +50,7 @@ const Header = ({ searchQuery, setSearchQuery }) => {
             to="/about"
             className={`${
               isActive("/about") ? "text-orange-500" : "text-gray-800"
-            } hover:text-orange-500`} // Fixed className syntax
+            } hover:text-orange-500`}
           >
             About
           </Link>

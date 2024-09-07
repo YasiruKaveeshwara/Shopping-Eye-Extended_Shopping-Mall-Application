@@ -1,9 +1,8 @@
-// src/components/ChangePasswordPage.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { HiArrowLeft } from "react-icons/hi"; // Importing the arrow icon
-import Header from "./Header"; // Import Header component
+import ProfileSideBar from "./ProfileSideBar";
 
 const ChangePasswordPage = () => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -34,14 +33,10 @@ const ChangePasswordPage = () => {
   };
 
   return (
-    <div className="bg-gray-100">
-      <Header
-        searchQuery={""} // Pass empty string if search query is not used
-        setSearchQuery={() => {}} // Empty function if search functionality is not needed
-        handleSearch={() => {}} // Empty function if search functionality is not needed
-      />
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+    <div className="flex">
+      <ProfileSideBar /> {/* Add Sidebar component */}
+      <div className="flex-grow bg-gray-100 p-8">
+        <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md mx-auto">
           <div className="flex items-center mb-6">
             <button
               onClick={handleGoBack}
