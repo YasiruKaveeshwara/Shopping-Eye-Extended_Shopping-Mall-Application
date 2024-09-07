@@ -126,4 +126,18 @@ const MeasurementsTable = () => {
       />
 
 
-    {/* Scrolling co
+    {/* Scrolling content End*/}
+  
+      
+      
+    
+    </div>
+     {/* Content Wrapper Ends Here*/}
+     
+  </div>
+  );
+}
+
+export default MeasurementsTable;
+
+

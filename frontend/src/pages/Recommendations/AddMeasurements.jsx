@@ -69,13 +69,13 @@ function handleInputChange(e) {
           setHip(value);
           break;
       case 'shoulders':
-          setHip(value);
+          setShoulders(value);
           break;
       case 'height':
-          setHip(value);
+          setHeight(value);
           break;
       case 'weight':
-          setHip(value);
+          setWeight(value);
           break;
       default:
           break;

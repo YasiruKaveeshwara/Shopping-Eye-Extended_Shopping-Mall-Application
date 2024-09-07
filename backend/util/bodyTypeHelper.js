@@ -80,7 +80,6 @@ function determineBodyType(waist, bust, hip, shoulders, height, weight) {
     else bodyTypes.push("Rectangle");
 
     // 11. Body Mass Index (BMI)
-    weight = measurements.weight || 65;  // Default weight if not provided
     const heightMeters = height / 100;  // Convert height to meters
     const BMI = weight / (heightMeters ** 2);
     if (BMI >= 25) bodyTypes.push("Apple Shape");

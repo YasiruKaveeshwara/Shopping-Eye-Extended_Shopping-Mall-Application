@@ -32,10 +32,9 @@ const measurementSchema = new Schema({
         required: true
     },
 
-    bodyTypes: {
-        type: [String],  // Array to store all detected body types
-        required: true
-    },
+    // bodyTypes: {
+    //     type: [String],  // Array to store all detected body types
+    // },
 
     finalBodyType: {
         type: String
