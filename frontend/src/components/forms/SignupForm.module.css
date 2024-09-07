@@ -4,17 +4,19 @@
   align-items: center;
   min-height: 100vh;
   background-size: cover;
-  background-position: 99% 1%; /* Move image further to the right */
+  background-position: 99% 1%; /* Background image position */
   background-repeat: no-repeat;
   padding: 20px;
 }
+
 .form {
-  background: #ffffff;
+  background: #f9f9f9; /* Matches the Shops form background */
   padding: 30px;
   margin-right: 350px;
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  border-radius: 10px; /* Matches Shops form rounded corners */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Matches Shops form shadow */
   width: 100%;
+  max-width: 800px; /* Ensure a consistent max-width similar to Shops form */
   display: grid;
   grid-template-columns: 1fr 1fr; /* Two equal columns */
   gap: 20px; /* Space between columns */
@@ -37,12 +39,12 @@
   display: block;
   font-size: 14px;
   margin-bottom: 6px;
-  color: #333;
+  color: #555; /* Consistent with Shops form label color */
 }
 
 .formField {
   width: 100%;
-  padding: 10px 12px;
+  padding: 10px;
   font-size: 16px;
   border-radius: 6px;
   border: 1px solid #ccc;
@@ -51,29 +53,29 @@
 }
 
 .formField:focus {
-  border-color: #16002e;
+  border-color: #16002e; /* Matches the Shops form focus color */
 }
 
 .formActions {
   grid-column: span 2; /* Make actions span both columns */
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
   margin-top: 20px;
 }
 
 .formSubmitBtn {
-  background-color: #16002e;
+  background-color: #16002e; /* Matches the button color in the Shops form */
   color: #fff;
-  padding: 12px 20px;
+  padding: 10px 20px;
   border: none;
   border-radius: 6px;
-  margin-right: 5px;
-  font-size: 16px;
   cursor: pointer;
+  font-size: 16px;
   transition: background-color 0.3s ease;
 }
 
 .formSubmitBtn:hover {
-  background-color: #ff742f;
+  background-color: #ff742f; /* Hover effect consistent with Shops form */
 }
 
 .error {
@@ -82,4 +84,25 @@
   margin-top: 10px;
   text-align: center;
   grid-column: span 2; /* Make error message span both columns */
+}
+
+.imagePreview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  border-radius: 6px;
+}
+
+@media (max-width: 600px) {
+  .form {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .formActions {
+    flex-direction: column;
+    gap: 10px;
+  }
 }

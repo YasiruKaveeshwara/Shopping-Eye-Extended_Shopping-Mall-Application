@@ -1,0 +1,95 @@
+.shop-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 750px;
+    width: 1250px;
+
+  }
+  
+  .shop-form {
+    background: #f9f9f9;
+    padding: 20px;
+    width: 800px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+  }
+  
+  .form-title {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #555;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .form-group input:read-only {
+    background-color: #e9e9e9;
+  }
+  
+  .shop-image {
+    max-width: 100px;
+    height: auto;
+    display: block;
+    margin-top: 10px;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .edit-button,
+  .delete-button {
+    background-color: #16002e;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .edit-button:hover {
+    background-color: #ff742f;
+  }
+  
+  .delete-button:hover {
+    background-color: #d32f2f;
+  }
+  
+  @media (max-width: 600px) {
+    .shop-form {
+      width: 100%;
+      padding: 15px;
+    }
+  
+    .form-actions {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+  

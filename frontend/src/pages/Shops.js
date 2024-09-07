@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import SignupForm from '../components/forms/SignupForm';
 import SidebarIcon from '../components/sidebar/SidebarIcon';
-import '../components/sidebar/styles.css';
+import "./shopstyles.css";
 
 export default function Shops() {
   const [shop, setShop] = useState(null); // To store logged-in shop details
@@ -30,7 +30,6 @@ export default function Shops() {
       console.error('Error fetching shop:', error);
     }
   };
-  
 
   const handleEdit = (shop) => {
     setEditingShop(shop);
@@ -40,28 +39,27 @@ export default function Shops() {
     setEditingShop(null);
   };
 
-  const handleDelete = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:3050/api/shops/${id}`, {
-        method: 'DELETE',
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setShop(null);
-        alert(data.message);
-      } else {
-        alert(data.message);
-      }
-    } catch (error) {
-      console.error('Error deleting shop:', error);
-    }
-  };
+  // const handleDelete = async (id) => {
+  //   try {
+  //     const response = await fetch(`http://localhost:3050/api/shops/${id}`, {
+  //       method: 'DELETE',
+  //     });
+  //     const data = await response.json();
+  //     if (response.ok) {
+  //       setShop(null);
+  //       alert(data.message);
+  //     } else {
+  //       alert(data.message);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error deleting shop:', error);
+  //   }
+  // };
 
   return (
     <>
       <SidebarIcon />
       <div className="shop">
-        <h2>Your Shop</h2>
         {editingShop ? (
           <SignupForm
             shop={editingShop}
@@ -72,25 +70,62 @@ export default function Shops() {
             onCancel={handleCancelEdit}
           />
         ) : (
-          <div className="shop-grid">
+          <div className="shop-form-container">
             {shop ? (
-              <div key={shop._id} className="shop-card">
-                <h3>{shop.shopName}</h3>
-                <p>Owner: {shop.ownerName}</p>
-                <p>shopCategory: {shop.shopCategory}</p>
-                <p>Location: {shop.location}</p>
-                <p>Phone: {shop.phone}</p>
-                <p>Email: {shop.email}</p>
-                <p>{shop.shopLogo && (
-        <img
-          src={shop.shopLogo}
-          alt={shop.shopName}
-          className="shop-image"
-        />
-      )}</p>
-                <button className='edit-button'  onClick={() => handleEdit(shop)}>Edit</button>
-                <button className='edit-button' onClick={() => handleDelete(shop._id)}>Delete</button>
-              </div>
+              <form className="shop-form">
+                <h3 className="form-title">Shop Profile</h3>
+                <div className="form-group">
+                  <label>Shop Name</label>
+                  <input type="text" value={shop.shopName} readOnly />
+                </div>
+
+                <div className="form-group">
+                  <label>Owner</label>
+                  <input type="text" value={shop.ownerName} readOnly />
+                </div>
+
+                <div className="form-group">
+                  <label>Category</label>
+                  <input type="text" value={shop.shopCategory} readOnly />
+                </div>
+
+                <div className="form-group">
+                  <label>Location</label>
+                  <input type="text" value={shop.location} readOnly />
+                </div>
+
+                <div className="form-group">
+                  <label>Phone</label>
+                  <input type="text" value={shop.phone} readOnly />
+                </div>
+
+                <div className="form-group">
+                  <label>Email</label>
+                  <input type="email" value={shop.email} readOnly />
+                </div>
+
+                {shop.shopLogo && (
+                  <div className="form-group">
+                    <label>Shop Logo</label>
+                    <img
+                      src={shop.shopLogo}
+                      alt={shop.shopName}
+                      className="shop-image"
+                    />
+                  </div>
+                )}
+
+                <div className="form-actions">
+                  <button
+                    type="button"
+                    className="edit-button"
+                    onClick={() => handleEdit(shop)}
+                  >
+                    Edit
+                  </button>
+                 
+                </div>
+              </form>
             ) : (
               <p>No shop available for the logged-in user.</p>
             )}
