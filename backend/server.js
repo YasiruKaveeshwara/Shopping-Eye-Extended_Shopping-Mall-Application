@@ -1,21 +1,32 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const dotenv = require("dotenv");
-const app = express();
-require("dotenv").config();
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const authRoutes = require('./routes/auth'); // Adjust the path to auth.js
+const cloudinary = require('./config/cloudinary'); // Your Cloudinary config file
 
-const PORT = process.env.PORT || 3050; //Do not change port if you want to change please let other know
+dotenv.config();
+
+const app = express();
+
+const measurementRouter = require("./routes/measurements"); // Import routes
+
+const PORT = process.env.PORT || 3050;
 
 app.use(cors());
 app.use(bodyParser.json());
 
 const URL = process.env.MONGODB_URL;
 
+if (!URL) {
+  console.error("MONGODB_URL is not defined in .env file");
+  process.exit(1);
+}
+
 mongoose.connect(URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+  // useNewUrlParser: true,
+  // useUnifiedTopology: true
 });
 
 const connection = mongoose.connection;
@@ -23,12 +34,12 @@ connection.once("open", () => {
   console.log("MongoDB connection success!");
 });
 
+// Use the routes defined in auth.js
+app.use('/api', authRoutes);
+app.use('/api/auth', authRoutes);
+// Routes
+app.use("/measurement", measurementRouter);
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
-// this is only sample code
-/*
-const travelAgencyRouter = require("./routes/travelAgency"); // import every models
-app.use("/travelAgencyList", travelAgencyRouter); // url for page
-*/
