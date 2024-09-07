@@ -34,6 +34,8 @@ function ItemView({ product, onEdit, onDelete, onWishlist }) {
       <p>
         Price: ${product.price}
         <br />
+        Category: {product.category}
+        <br />
         Shop Location: {product.shopLocation}
         <br />
       </p>

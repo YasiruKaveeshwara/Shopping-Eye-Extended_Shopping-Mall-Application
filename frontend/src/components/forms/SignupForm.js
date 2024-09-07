@@ -246,7 +246,7 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
 
         <div className={styles.formActions}>
           <button type="submit" className={styles.formSubmitBtn}>{isEditing ? 'Update Shop' : 'Sign Up'}</button>
-          <button type="button" onClick={onCancel} className={styles.formCancelBtn}>Cancel</button>
+          <button type="button" onClick={onCancel} className={styles.formSubmitBtn}>Cancel</button>
         </div>
       </form>
     </div>

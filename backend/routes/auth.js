@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
-const itemController = require('../controllers/itemController'); // Assuming you have created the itemController as provided earlier
+const itemController = require('../controllers/itemController');
+const feedbackController = require('../controllers/feedbackController'); 
 const ShopModel = require('../models/Shop.js');
 const ItemModel = require('../models/Item.js');
 const upload = require('../config/multer');
@@ -52,5 +53,13 @@ router.put('/items/:id', upload.single('image'), itemController.updateItemById);
 router.delete('/items/:id', itemController.deleteItemById);
 
 
+
+router.post('/feedback/:shopId', feedbackController.addFeedback);
+
+// Route to get feedback for a specific shop
+router.get('/feedback/:shopId', feedbackController.getFeedbackByShop);
+
+// Route to get all feedback (for an admin page if needed)
+router.get('/feedback', feedbackController.getAllFeedback);
 
 module.exports = router;

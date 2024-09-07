@@ -23,6 +23,7 @@ const ProductsForm = ({ product, onSuccess = () => {}, onCancel = () => {} }) =>
         shopName: product.shopName || '',
         productName: product.productName || '',
         category: product.category || '',
+        tags: product.tags || '',
         price: product.price || '',
         size: product.size || '',
         shopLocation: product.shopLocation || '',
@@ -59,7 +60,7 @@ const ProductsForm = ({ product, onSuccess = () => {}, onCancel = () => {} }) =>
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!form.shopName || !form.productName || !form.category || !form.price || !form.size || !form.shopLocation || !form.itemLocation) {
+    if (!form.shopName || !form.productName || !form.category || !form.tags || !form.price || !form.size || !form.shopLocation || !form.itemLocation) {
       setError('Please fill in all fields.');
       return;
     }
@@ -74,6 +75,7 @@ const ProductsForm = ({ product, onSuccess = () => {}, onCancel = () => {} }) =>
       formData.append('shopName', form.shopName);
       formData.append('productName', form.productName);
       formData.append('category', form.category);
+      formData.append('tags', form.tags);
       formData.append('price', form.price);
       formData.append('size', form.size);
       formData.append('shopLocation', form.shopLocation);
@@ -94,6 +96,7 @@ const ProductsForm = ({ product, onSuccess = () => {}, onCancel = () => {} }) =>
           shopName: '',
           productName: '',
           category: '',
+          tags: '',
           price: '',
           size: '',
           shopLocation: '',
@@ -145,7 +148,7 @@ const ProductsForm = ({ product, onSuccess = () => {}, onCancel = () => {} }) =>
             required
           />
         </div>
-
+        
         <div className={styles.formGroup}>
           <label className={styles.formLabel}>Category</label>
           <input
@@ -153,6 +156,18 @@ const ProductsForm = ({ product, onSuccess = () => {}, onCancel = () => {} }) =>
             type="text"
             name="category"
             value={form.category}
+            onChange={onUpdateField}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.formLabel}>Tags</label>
+          <input
+            className={styles.formField}
+            type="text"
+            name="tags"
+            value={form.tags}
             onChange={onUpdateField}
             required
           />
@@ -221,8 +236,8 @@ const ProductsForm = ({ product, onSuccess = () => {}, onCancel = () => {} }) =>
           <label className={styles.formLabel}>Image</label>
           {imagePreview && (
             <div className={styles.imagePreview}>
-              <img src={imagePreview} alt="Image preview" className={styles.image} />
-            </div>
+         <img src={imagePreview} alt="" className='shop-image' />
+        </div>
           )}
           <input
             className={styles.formField}
@@ -236,7 +251,7 @@ const ProductsForm = ({ product, onSuccess = () => {}, onCancel = () => {} }) =>
 
         <div className={styles.formActions}>
           <button type="submit" className={styles.formSubmitBtn}>{isEditing ? 'Update Item' : 'Add Item'}</button>
-          <button type="button" onClick={onCancel} className={styles.formCancelBtn}>Cancel</button>
+          <button type="button" onClick={onCancel} className={styles.formSubmitBtn}>Cancel</button>
         </div>
       </form>
     </div>

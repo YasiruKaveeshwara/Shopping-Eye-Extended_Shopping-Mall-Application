@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import SignupForm from '../components/forms/SignupForm';
 import SidebarIcon from '../components/sidebar/SidebarIcon';
-import Header from '../components/header/Header';
+import '../components/sidebar/styles.css';
 
 export default function Shops() {
   const [shop, setShop] = useState(null); // To store logged-in shop details
@@ -60,8 +60,7 @@ export default function Shops() {
   return (
     <>
       <SidebarIcon />
-      <div className="main">
-        <Header />
+      <div className="shop">
         <h2>Your Shop</h2>
         {editingShop ? (
           <SignupForm
@@ -82,15 +81,15 @@ export default function Shops() {
                 <p>Location: {shop.location}</p>
                 <p>Phone: {shop.phone}</p>
                 <p>Email: {shop.email}</p>
-                <p>Logo:   {shop.shopLogo && (
+                <p>{shop.shopLogo && (
         <img
           src={shop.shopLogo}
           alt={shop.shopName}
           className="shop-image"
         />
       )}</p>
-                <button onClick={() => handleEdit(shop)}>Edit</button>
-                <button onClick={() => handleDelete(shop._id)}>Delete</button>
+                <button className='edit-button'  onClick={() => handleEdit(shop)}>Edit</button>
+                <button className='edit-button' onClick={() => handleDelete(shop._id)}>Delete</button>
               </div>
             ) : (
               <p>No shop available for the logged-in user.</p>

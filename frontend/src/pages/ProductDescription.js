@@ -50,6 +50,8 @@ function ProductDescription() {
             <p><label>Shop Location:</label> {product.shopLocation}</p>
             <p><label>Item Location:</label> {product.itemLocation}</p>
             <p><label>Description:</label> {product.description}</p>
+            <p><label>Tags:</label> {product.tags}</p>
+
           </div>
         </div>
         {/* Related Products Section */}

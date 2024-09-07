@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import LoginForm from './components/forms/Loginform.js'; // Corrected path
 import SignupForm from './components/forms/SignupForm.js'; // Corrected path
+import FeedbackPage from './components/FeedbackPage.js'; // Corrected path
 import Home from "./pages/Home.js";
 import Services from "./pages/Services.js";
 import Products from "./pages/Products.js";
@@ -29,6 +30,8 @@ ReactDOM.render(
         <Route path='/addproducts' element={<AddProducts />} /> 
         <Route path="/product/:id" element={<ProductDescription />} />
         <Route path="/profile" element={<SignupDetails />} />
+        <Route path="/feedback" element={<FeedbackPage />} /> {/* Updated */}
+
 
       </Routes>
       </AuthContextProvider>

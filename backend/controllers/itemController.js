@@ -4,11 +4,11 @@ const cloudinary = require('../config/cloudinary');
 
 // Add Item Controller
 exports.addItem = async (req, res) => {
-  const { shopName, productName, category, price, size, shopLocation, itemLocation, description } = req.body;
+  const { shopName, productName, category, tags, price, size, shopLocation, itemLocation, description } = req.body;
   const image = req.file;  // Get the uploaded image
 
   try {
-    if (!shopName || !productName || !category || !price || !size || !shopLocation || !itemLocation) {
+    if (!shopName || !productName || !category || !tags || !price || !size || !shopLocation || !itemLocation) {
       return res.status(400).json({ message: "Required fields are missing" });
     }
 
@@ -23,6 +23,7 @@ exports.addItem = async (req, res) => {
       shopName,
       productName,
       category,
+      tags,
       price,
       size,
       shopLocation,
@@ -74,7 +75,7 @@ exports.getItemById = (req, res) => {
 // Update Item by ID Controller
 exports.updateItemById = async (req, res) => {
   const { id } = req.params;
-  const { shopName, productName, category, price, size, shopLocation, itemLocation, description } = req.body;
+  const { shopName, productName, category, tags, price, size, shopLocation, itemLocation, description } = req.body;
   const image = req.file;  // Get the uploaded image
 
   try {
@@ -87,6 +88,7 @@ exports.updateItemById = async (req, res) => {
     item.shopName = shopName || item.shopName;
     item.productName = productName || item.productName;
     item.category = category || item.category;
+    item.tags = tags || item.tags;
     item.price = price || item.price;
     item.size = size || item.size;
     item.shopLocation = shopLocation || item.shopLocation;
