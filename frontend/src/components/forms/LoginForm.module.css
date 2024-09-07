@@ -3,6 +3,7 @@
   justify-content: flex-start; /* Align items to the start of the container */
   align-items: center;
   min-height: 100vh;
+  background-color: #16002e;
   background-size: cover;
   background-position: 99% 1%; /* Move image further to the right */
   background-repeat: no-repeat;
@@ -10,16 +11,16 @@
 }
 
 .form {
-  background: #ffffff;
+  background: #e8e5eb;
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 500px; /* Adjust width as needed */
+  max-width: 800px; /* Adjust width as needed */
   display: flex;
   flex-direction: column; /* Arrange fields in a single column */
   gap: 20px; /* Space between fields */
-  margin-left: 20px; /* Move the form to the left */
+  margin-left: 350px; /* Move the form to the left */
 }
 
 .heading {
