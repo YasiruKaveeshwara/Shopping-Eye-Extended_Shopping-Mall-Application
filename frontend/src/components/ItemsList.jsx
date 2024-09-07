@@ -190,7 +190,8 @@ const ItemsList = () => {
               filteredItems.map((item) => (
                 <div
                   key={item._id}
-                  className="bg-gray-100 p-4 rounded shadow-sm"
+                  className="bg-gray-100 p-4 rounded shadow-sm cursor-pointer"
+                  onClick={() => handleItemClick(item._id)} // Add this line
                 >
                   <img
                     src={item.imageUrl}
