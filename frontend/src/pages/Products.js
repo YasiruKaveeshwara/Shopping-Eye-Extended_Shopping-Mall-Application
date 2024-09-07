@@ -63,7 +63,7 @@ export default function Products() {
       <div className="main">
         <Header />
         <Link to="/addproducts">
-          <button className="add-product-button">Add Product</button>
+          <button className="edit-button">Add Product</button>
         </Link>
         <h2>Products</h2>
         {editingProduct ? (

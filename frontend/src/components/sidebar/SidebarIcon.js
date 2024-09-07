@@ -23,7 +23,7 @@ export default function SidebarIcon() {
     if (storedShopLogo) {
       setShopLogo(storedShopLogo);
     }
-  }, []);
+  }, []); // Dependency array is empty to run only on mount
 
   const location = useLocation();
 
@@ -45,29 +45,29 @@ export default function SidebarIcon() {
         Dashboard
       </Link>
       <Link
-        to="/profile"
-        className={location.pathname === "/profile" ? "active" : ""}
+        to="/shops"
+        className={location.pathname === "/shops" ? "active" : ""}
       >
-        <img src={profileIcon} alt="Items" className="sidebar-icon" />
+        <img src={profileIcon} alt="Profile" className="sidebar-icon" />
         Profile
       </Link>
       <Link
         to="/products"
         className={location.pathname === "/products" ? "active" : ""}
       >
-        <img src={itemsIcon} alt="Items" className="sidebar-icon" />
+        <img src={itemsIcon} alt="Products" className="sidebar-icon" />
         Products
       </Link>
       <Link
         to="/services"
-        className={location.pathname === "/clients" ? "active" : ""}
+        className={location.pathname === "/services" ? "active" : ""}
       >
         <img src={analyticsIcon} alt="Analytics" className="sidebar-icon" />
         Analytics
       </Link>
       <Link
-        to="/services"
-        className={location.pathname === "/contact" ? "active" : ""}
+        to="/feedback"
+        className={location.pathname === "/feedback" ? "active" : ""}
       >
         <img src={feedbackIcon} alt="Feedback" className="sidebar-icon" />
         Feedback
@@ -76,8 +76,8 @@ export default function SidebarIcon() {
       {/* Spacer added here */}
       <div className="sidebar-spacer"></div>
       <Link
-        to="/contact"
-        className={location.pathname === "/contact" ? "active" : ""}
+        to="/logout"
+        className={location.pathname === "/logout" ? "active" : ""}
       >
         <img src={logoutIcon} alt="Logout" className="sidebar-icon" />
         Logout

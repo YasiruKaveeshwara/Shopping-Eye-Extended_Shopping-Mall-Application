@@ -1,28 +1,19 @@
-const mongoose = require("mongoose"); // Add this line
-const Item = require("../models/Item.js");
-const cloudinary = require("../config/cloudinary");
+const mongoose = require('mongoose'); // Add this line
+const Item = require('../models/Item.js');
+const cloudinary = require('../config/cloudinary');
 
 // Add Item Controller
 exports.addItem = async (req, res) => {
-  const { shopName, productName, category, price, size, shopLocation, itemLocation, description } =
-    req.body;
-  const image = req.file; // Get the uploaded image
+  const { shopName, productName, category, tags, price, size, shopLocation, itemLocation, description } = req.body;
+  const image = req.file;  // Get the uploaded image
 
   try {
-    if (
-      !shopName ||
-      !productName ||
-      !category ||
-      !price ||
-      !size ||
-      !shopLocation ||
-      !itemLocation
-    ) {
+    if (!shopName || !productName || !category || !tags || !price || !size || !shopLocation || !itemLocation) {
       return res.status(400).json({ message: "Required fields are missing" });
     }
 
     // Upload image to Cloudinary and get URL
-    let imageUrl = "";
+    let imageUrl = '';
     if (image) {
       const result = await cloudinary.uploader.upload(image.path);
       imageUrl = result.secure_url;
@@ -32,12 +23,13 @@ exports.addItem = async (req, res) => {
       shopName,
       productName,
       category,
+      tags,
       price,
       size,
       shopLocation,
       itemLocation,
       description, // Added description field
-      imageUrl, // Save image URL
+      imageUrl  // Save image URL
     });
 
     await newItem.save();
@@ -48,6 +40,7 @@ exports.addItem = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
 
 // Get All Items Controller
 exports.getAllItems = async (req, res) => {
@@ -66,25 +59,24 @@ exports.getItemById = (req, res) => {
 
   // Validate the ObjectId format
   if (!mongoose.Types.ObjectId.isValid(itemId)) {
-    return res.status(400).json({ message: "Invalid item ID" });
+    return res.status(400).json({ message: 'Invalid item ID' });
   }
 
   Item.findById(itemId)
-    .then((item) => {
+    .then(item => {
       if (!item) {
-        return res.status(404).json({ message: "Item not found" });
+        return res.status(404).json({ message: 'Item not found' });
       }
       res.json(item);
     })
-    .catch((err) => res.status(500).json({ message: "Error retrieving item", error: err }));
+    .catch(err => res.status(500).json({ message: 'Error retrieving item', error: err }));
 };
 
 // Update Item by ID Controller
 exports.updateItemById = async (req, res) => {
   const { id } = req.params;
-  const { shopName, productName, category, price, size, shopLocation, itemLocation, description } =
-    req.body;
-  const image = req.file; // Get the uploaded image
+  const { shopName, productName, category, tags, price, size, shopLocation, itemLocation, description } = req.body;
+  const image = req.file;  // Get the uploaded image
 
   try {
     const item = await Item.findById(id);
@@ -96,11 +88,13 @@ exports.updateItemById = async (req, res) => {
     item.shopName = shopName || item.shopName;
     item.productName = productName || item.productName;
     item.category = category || item.category;
+    item.tags = tags || item.tags;
     item.price = price || item.price;
     item.size = size || item.size;
     item.shopLocation = shopLocation || item.shopLocation;
     item.itemLocation = itemLocation || item.itemLocation;
     item.description = description || item.description;
+
 
     // Handle image update
     if (image) {

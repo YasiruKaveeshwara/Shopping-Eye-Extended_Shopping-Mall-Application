@@ -3,54 +3,58 @@ import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import '../sidebar/styles.css';
 import Heart from '../../images/heart.png';
-import EyeIcon from '../../images/eye.png';
 import EditIcon from '../../images/edit.png';
 import DeleteIcon from '../../images/bin.png';
+import EyeIcon from '../../images/eye.png';
 
-function ItemView({ product, onEdit, onDelete, onWishlist }) {
+function ShopView({ shop, onEdit, onDelete, onWishlist }) {
   const navigate = useNavigate();
 
-  const handleViewProduct = (product) => {
-    navigate(`/product/${product._id}`);
+  const handleViewShop = (shop) => {
+    navigate(`/shop/${shop._id}`);
   };
 
   return (
-    <div className="product-card">
+    <div className="shop-card">
       {onWishlist && (
         <div className="heart-icon-container">
-          <button className="icon-button" onClick={() => onWishlist(product)}>
+          <button className="icon-button" onClick={() => onWishlist(shop)}>
             <img src={Heart} alt="Wishlist" className="wishlist-icon" />
           </button>
         </div>
       )}
-      {product.imageUrl && (
+      {shop.shopLogo && (
         <img
-          src={product.imageUrl}
-          alt={product.productName}
-          className="product-image"
+          src={shop.shopLogo}
+          alt={shop.shopName}
+          className="shop-image"
         />
       )}
-      <h3>{product.productName}</h3>
+      <h3>{shop.shopName}</h3>
       <p>
-        Price: ${product.price}
+        Owner: {shop.ownerName}
         <br />
-        Category: {product.category}
+        Shop Category: {shop.shopCategory}
         <br />
-        Shop Location: {product.shopLocation}
+        Email: {shop.email}
+        <br />
+        Location: {shop.location}
+        <br />
+        Phone: {shop.phone}
         <br />
       </p>
       <div className="button-group">
         {onEdit && (
-          <button className="icon-button" onClick={() => onEdit(product)}>
+          <button className="icon-button" onClick={() => onEdit(shop)}>
             <img src={EditIcon} alt="Edit" className="icon" />
           </button>
         )}
         {onDelete && (
-          <button className="icon-button" onClick={() => onDelete(product._id)}>
+          <button className="icon-button" onClick={() => onDelete(shop._id)}>
             <img src={DeleteIcon} alt="Delete" className="icon" />
           </button>
         )}
-        <button className="icon-button" onClick={() => handleViewProduct(product)}>
+        <button className="icon-button" onClick={() => handleViewShop(shop)}>
           <img src={EyeIcon} alt="View Details" className="wishlist-icon" />
         </button>
       </div>
@@ -58,11 +62,11 @@ function ItemView({ product, onEdit, onDelete, onWishlist }) {
   );
 }
 
-ItemView.propTypes = {
-  product: PropTypes.object.isRequired,
+ShopView.propTypes = {
+  shop: PropTypes.object.isRequired,
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
   onWishlist: PropTypes.func,
 };
 
-export default ItemView;
+export default ShopView;

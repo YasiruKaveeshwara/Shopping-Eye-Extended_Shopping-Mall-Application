@@ -1,35 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 import { Html5QrcodeScanner } from "html5-qrcode";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
-import * as THREE from "three";
-
-function Building() {
-  return (
-    <group position={[0, -2, 0]}>
-      <mesh>
-        <boxGeometry args={[3, 1, 3]} />
-        <meshStandardMaterial color={"#6aff00"} />
-      </mesh>
-      {/* First story */}
-      <mesh position={[0, 1, 0]}>
-        <boxGeometry args={[3, 1, 3]} />
-        <meshStandardMaterial color={"#312eff"} />
-      </mesh>
-      {/* Second story */}
-      <mesh position={[0, 2, 0]}>
-        <boxGeometry args={[3, 1, 3]} />
-        <meshStandardMaterial color={"#ff2929"} />
-      </mesh>
-      {/* Third story */}
-      <mesh position={[0, 3, 0]}>
-        <boxGeometry args={[3, 1, 3]} />
-        <meshStandardMaterial color={"#44ffff"} />
-      </mesh>
-    </group>
-  );
-}
 
 export default function ShopQR() {
   const [url, setUrl] = useState("");
@@ -37,6 +8,7 @@ export default function ShopQR() {
   const [scannedData, setScannedData] = useState("");
   const [showScanner, setShowScanner] = useState(false);
   const scannerRef = useRef(null);
+  const [shopName, setShopName] = useState("");
 
   const generateQRCode = () => {
     if (url.trim() !== "") {
@@ -86,11 +58,11 @@ export default function ShopQR() {
 
       {qrCode && (
         <div>
-          <h2>QR Code:</h2>
+          <h2>QR Code :</h2>
           <QRCodeCanvas value={qrCode} />
         </div>
       )}
-
+      {/* ------------------------------------------------------------------------------------------------------- */}
       <div>
         <button onClick={() => setShowScanner(true)}>Scan QR Code</button>
       </div>
@@ -103,8 +75,6 @@ export default function ShopQR() {
           <p>{scannedData}</p>
         </div>
       )}
-
-      
     </div>
   );
 }
