@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import SidebarIcon from "../components/sidebar/SidebarIcon";
-import Header from "../components/header/Header";
 import ItemView from '../components/ProductCardView/ItemView'; // Import ItemView component
 import "../components/sidebar/styles.css";
 
@@ -64,8 +63,7 @@ export default function Home() {
     <>
       <SidebarIcon />
       <div className="main">
-        <Header />
-        <h2>Popular Products!</h2>
+        <h2 className="heading">Popular Products!</h2>
         <br></br><br></br>
         <div className="product-grid">
           {products.length > 0 ? (

@@ -6,9 +6,15 @@
 body {
   font-family: Georgia, "Times New Roman", Times, serif;
   margin: 0;
+  background-color: c4c0c9;
   padding: 0;
 }
-
+.heading{
+  font-size: 25px;
+  font-weight: bold;
+  color: #16002e;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
 /* Sidebar styles */
 .sidebar {
   background: #16002e;
@@ -36,10 +42,10 @@ body {
 }
 
 .shop-name {
-  font-size: 25px;
+  font-size: 20px;
   padding-top: 15px;
   font-weight: bold;
-  font-style: italic;
+  font-family: Georgia, 'Times New Roman', Times, serif;
   color: #ffffff;
 }
 
@@ -75,9 +81,7 @@ body {
 
 /* Main content styles */
 .main {
-  margin-left: 200px;
-  margin-top: 80px;
-  padding: 20px;
+  margin-left: 240px;
 }
 
 .sidebar-spacer {
@@ -90,6 +94,7 @@ body {
   flex-wrap: wrap;
   gap: 20px;
   justify-content: space-between;
+  margin-top: 40px;
 }
 
 .product-card {
@@ -98,8 +103,8 @@ body {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
-  background: #fff;
-  border: 1px solid #ffffff;
+  background: #e8e5eb;
+  border: 1px solid #e8e5eb;
   text-align: center;
   padding: 20px;
   height: 445px; /* Reduced height for better aesthetics */

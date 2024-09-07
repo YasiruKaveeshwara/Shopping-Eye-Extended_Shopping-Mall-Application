@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'; // Import Link component
 import SidebarIcon from '../components/sidebar/SidebarIcon';
-import Header from '../components/header/Header';
 import ProductsForm from '../components/forms/ProductsForm';
 import ItemView from '../components/ProductCardView/ItemView'; // Import ItemView component
 import '../components/sidebar/styles.css';
@@ -61,11 +60,10 @@ export default function Products() {
     <>
       <SidebarIcon />
       <div className="main">
-        <Header />
-        <Link to="/addproducts">
-          <button className="edit-button">Add Product</button>
-        </Link>
-        <h2>Products</h2>
+        <h2 className='heading'>Products   <Link to="/addproducts">
+          <button className="add-button">Add Product</button>
+        </Link></h2>
+      
         {editingProduct ? (
           <div>
             <h3>Edit Product</h3>

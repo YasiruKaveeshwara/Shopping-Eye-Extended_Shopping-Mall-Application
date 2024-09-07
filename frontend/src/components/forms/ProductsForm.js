@@ -119,11 +119,12 @@ const ProductsForm = ({ product, onSuccess = () => {}, onCancel = () => {} }) =>
       setError(`An error occurred while ${isEditing ? 'updating' : 'adding'} the item.`);
     }
   };
+  
 
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={onSubmit}>
-        <h2 className={styles.heading}>{isEditing ? 'Edit Item' : 'Add Item'}</h2>
+        <h2 className={styles.heading}>{isEditing ? 'Edit Product' : 'Add Product'}</h2>
 
         <div className={styles.formGroup}>
           <label className={styles.formLabel}>Shop Name</label>
