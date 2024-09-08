@@ -12,6 +12,7 @@ import SignupDetails from './pages/SignupDetails';
 import AddMeasurements from './pages/Recommendations/AddMeasurements.jsx';
 import ListMeasurements from './pages/Recommendations/ListMeasurements.jsx';
 import UpdateMeasurements from './pages/Recommendations/UpdateMeasurements.jsx';
+// import MyRecommendations from './pages/Recommendations/MyRecommendations.jsx';
 import TestPage from './pages/Recommendations/TestPage.jsx';
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -32,10 +33,11 @@ ReactDOM.render(
         <Route path='/addproducts' element={<AddProducts />} /> 
         <Route path="/product/:id" element={<ProductDescription />} />
         <Route path="/profile" element={<SignupDetails />} />
-        <Route path="/addMeasurements" element={<AddMeasurements />} />
+        <Route path="/" element={<AddMeasurements />} />
         <Route path="/listMeasurements" element={<ListMeasurements />} />
         <Route path='/updateMyMeasurements/:measurementsId' element={<UpdateMeasurements />} />
-        <Route path="/d" element={<TestPage />} />
+        {/* <Route path='/myRecommendations/:measurementsId' element={<MyRecommendations />} /> */}
+        <Route path='/myRecommendations/:measurementsId' element={<TestPage />} />
 
       </Routes>
       </AuthContextProvider>
