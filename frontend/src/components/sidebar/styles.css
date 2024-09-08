@@ -6,9 +6,15 @@
 body {
   font-family: Georgia, "Times New Roman", Times, serif;
   margin: 0;
+  background-color: c4c0c9;
   padding: 0;
 }
-
+.heading{
+  font-size: 25px;
+  font-weight: bold;
+  color: #16002e;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
 /* Sidebar styles */
 .sidebar {
   background: #16002e;
@@ -23,29 +29,24 @@ body {
 
 .box-above-dashboard {
   background: #16002e;
-  padding: 15px;
   margin-right: 29px;
   text-align: center;
-  margin-bottom: 20px;
-  border-radius: 1px;
+  margin-bottom: 35px;
   display: flex;
-  height: 80px;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  position: relative;
-  top: 0;
 }
-
 .shop-logo {
-  width: 40px;
-  height: 30px;
-  margin-right: 15px;
+  width: 250px;
+  height: 75px;
 }
 
 .shop-name {
-  font-size: 16px;
+  font-size: 20px;
+  padding-top: 15px;
   font-weight: bold;
-  color: #fbfbfb;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color: #ffffff;
 }
 
 .sidebar a {
@@ -80,13 +81,11 @@ body {
 
 /* Main content styles */
 .main {
-  margin-left: 200px;
-  margin-top: 80px;
-  padding: 20px;
+  margin-left: 240px;
 }
 
 .sidebar-spacer {
-  height: 220px;
+  height: 180px;
 }
 
 /* Product Grid and Card styles */
@@ -95,6 +94,7 @@ body {
   flex-wrap: wrap;
   gap: 20px;
   justify-content: space-between;
+  margin-top: 40px;
 }
 
 .product-card {
@@ -103,8 +103,8 @@ body {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
-  background: #fff;
-  border: 1px solid #ffffff;
+  background: #e8e5eb;
+  border: 1px solid #e8e5eb;
   text-align: center;
   padding: 20px;
   height: 445px; /* Reduced height for better aesthetics */
@@ -165,4 +165,28 @@ body {
   position: absolute;
   top: 10px;
   right: 10px;
+}
+.shop{
+  margin-left: 220px;
+}
+.shop-image{
+  width: 350px;
+  height: 350px;
+}
+
+ 
+.edit-button {
+  background-color: #16002e;
+  color: #fff;
+  padding: 12px 20px;
+  margin-right: 8px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+  background-color: #ff742f;
 }

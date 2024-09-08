@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
-const itemController = require('../controllers/itemController'); // Assuming you have created the itemController as provided earlier
+const itemController = require('../controllers/itemController');
+const feedbackController = require('../controllers/feedbackController'); 
 const ShopModel = require('../models/Shop.js');
 const ItemModel = require('../models/Item.js');
 const upload = require('../config/multer');
@@ -11,19 +12,33 @@ router.post('/signup', upload.single('shopLogo'), authController.signup);
 
 // Login route
 router.post('/login', authController.login);
-router.get('/test', (req, res) => {
-    res.send('Test route is working');
-  });
-  
-  // GET all shops
-  router.get('/getShops', (req, res) => {
-    ShopModel.find()
-      .then(shops => res.json(shops))
-      .catch(err => res.status(500).json({ message: 'Error retrieving shops', error: err }));
-  });
-  //get shop user info
-  // Add Item
-  router.post('/items/add', upload.single('image'), itemController.addItem);
+
+// GET all shops
+// get 1 shop
+router.get('/getShops', async (req, res) => {
+  const { email } = req.query;
+  try {
+    const shop = await ShopModel.findOne({ email });
+    if (!shop) {
+      return res.status(404).json({ message: 'Shop not found' });
+    }
+    res.json(shop);
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving shop', error });
+  }
+});
+
+// Get Single shop by ID
+router.get('/shops/:id', authController.getShopById);
+
+// Update shop by ID
+router.put('/shops/:id', upload.single('shopLogo'), authController.updateShopById);
+
+
+
+
+// Add Item
+router.post('/items/add', upload.single('image'), itemController.addItem);
 
 // Get All Items
 router.get('/items', itemController.getAllItems);
@@ -37,7 +52,14 @@ router.put('/items/:id', upload.single('image'), itemController.updateItemById);
 // Delete Item by ID
 router.delete('/items/:id', itemController.deleteItemById);
 
-// Update shop details
-router.post('/update', upload.single('shopLogo'), authController.updateShopDetails);
+
+
+router.post('/feedback/:shopId', feedbackController.addFeedback);
+
+// Route to get feedback for a specific shop
+router.get('/feedback/:shopId', feedbackController.getFeedbackByShop);
+
+// Route to get all feedback (for an admin page if needed)
+router.get('/feedback', feedbackController.getAllFeedback);
 
 module.exports = router;

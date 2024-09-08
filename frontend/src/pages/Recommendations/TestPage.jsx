@@ -3,6 +3,8 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
+import ItemView from '../../components/ProductCardView/ItemView'; // Adjust the path as necessary
+
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
@@ -34,26 +36,84 @@ const outfitData = [
     {
         name: 'Fitted Dress',
         description: 'Show off the waistline.',
-        images: [fitted1, fitted2,]
+        images: [fitted1, fitted2, fitted3]
     },
     {
         name: 'Wrap Dress',
         description: 'Accentuate curves.',
-        images: [wrap1, wrap2]
+        images: [wrap1, wrap2, wrap3]
     },
     {
         name: 'High-Waisted Skirt',
         description: 'Define the waist.',
-        images: [highwaistsk1, highwaistsk2]
+        images: [highwaistsk1, highwaistsk2, highwaistsk3]
     },
     {
         name: 'V-Neck Top',
         description: 'Draw attention to the upper body.',
-        images: [vneck1, vneck2]
+        images: [vneck1, vneck2, vneck3]
     }
 ];
 
-const TestPage = () => {
+const MyRecommendations = () => {
+    const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:3050/api/items');
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const handleEdit = (product) => {
+    console.log('Edit product:', product);
+    // Handle product editing logic here
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3050/api/items/${id}`, {
+        method: 'DELETE',
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setProducts(products.filter((product) => product._id !== id));
+        alert(data.message);
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
+  };
+
+  const handleWishlist = (product) => {
+    console.log('Wishlist product:', product);
+    // Handle wishlist logic here
+  };
+
+  // Filter products that contain the word "skirt" in the name, description, or tags
+  const filteredProducts = products.filter(product =>
+    product.productName.toLowerCase().includes('skirt') ||
+    product.description.toLowerCase().includes('skirt') ||
+    product.category.toLowerCase().includes('skirt') ||
+    (Array.isArray(product.tags) && product.tags.some(tag => tag.toLowerCase().includes('skirt'))) ||
+    product.productName.toLowerCase().includes('top') ||
+    product.description.toLowerCase().includes('top') ||
+    product.category.toLowerCase().includes('top') ||
+    (Array.isArray(product.tags) && product.tags.some(tag => tag.toLowerCase().includes('top')))
+  );
+  
+
+
+
     const pdfRef = useRef();
 
     const [selectedMeasurements, setSelectedMeasurements] = useState(null);
@@ -134,7 +194,7 @@ const TestPage = () => {
     return (
         <div className="relative min-h-screen">
             {/* Background Image */}
-            <div
+            {/* <div
                 className="absolute inset-0 z-0 bg-fixed"
                 style={{
                     backgroundImage: `url(${bgblue})`,
@@ -142,7 +202,7 @@ const TestPage = () => {
                     backgroundPosition: 'center',
                 }}
             >
-            </div>
+            </div> */}
 
             {/* Content Wrapper */}
             <div className="relative z-10 flex flex-col items-center justify-center min-h-screen">
@@ -157,13 +217,13 @@ const TestPage = () => {
 
                         <div className="grid grid-cols-1 gap-10 pt-4 lg:px-40 sm:px-10 sm:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1">
                             <div>
-                                <h1 className="text-4xl font-bold text-center text-green-800 font-inika">Your Body Type: Hourglass</h1>
+                                <h1 className="text-2xl font-bold text-center text-green-800 font-inika">Your Body Type: Hourglass</h1>
 
                                 <div className="mt-2 p-des max-h-24">
-                                    <p className="text-lg text-center font-mclaren">Well-balanced proportions with a defined waist. Bust and hips are approximately the same size.</p>
+                                    <p className="text-base text-center font-mclaren">Well-balanced proportions with a defined waist. Bust and hips are approximately the same size.</p>
                                 </div>
                                 <div className="mt-2 p-des max-h-24">
-                                    <p className="text-lg text-center font-mclaren">Your body is curvy with a small waist, bust, and hips in proportion.</p>
+                                    <p className="text-base text-center font-mclaren">Your body is curvy with a small waist, bust, and hips in proportion.</p>
                                 </div>
                             </div>
                         </div>
@@ -199,40 +259,56 @@ const TestPage = () => {
                             </button>
                         </div>
                     </div>
+
                 </div>
 
-
-                {/* Carousel Section 2 for Outfits */}    
-    <h2 className="text-2xl font-bold text-center text-green-800 mb-6">Recommended Outfits</h2>
-    <div className="relative overflow-hidden w-full max-w-md mx-auto mb-5">
-      <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-       {outfitData.map((outfit, imgIndex) => (
-          <div className="flex-shrink-0 w-full" key={imgIndex}>
-             <h3 className="text-xl font-semibold text-center mb-4">{outfit.name}</h3>
-            {outfit.images.map((image, imgIndex) => (
-                <div className="container shadow-md rounded-md overflow-hidden w-full max-h-80">
-            <img className="w-full h-64 object-cover" src={image} alt={`Slide ${imgIndex}`} />
-            <div className="absolute bottom-0 w-full bg-black bg-opacity-50 text-white text-center py-4">
-                                                <p className="text-md">{outfit.description}</p>
-                                            </div>
+{/* Carousel Section 2 for Outfits */}
+<div className="w-full max-w-full mx-auto mb-5 bg-black">
+<h2 className="text-2xl font-bold text-center text-white mb-6 bg-black py-2">Recommended Outfits</h2>
+<div className="relative overflow-hidden w-full max-w-3xl mx-auto mb-5 bg-black">
+  {/* Slide container */}
+  <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+    {outfitData.map((outfit, outfitIndex) => (
+      <div className="flex-shrink-0 w-full" key={outfitIndex}>
+        {/* Outfit Name */}
+        <h3 className="text-xl font-semibold text-center mb-4 text-white">{outfit.name}</h3>
+        
+        {/* Horizontal Image Collage */}
+        <div className="flex justify-center space-x-4">
+          {outfit.images.map((image, imgIndex) => (
+            <div className="shadow-md rounded-md overflow-hidden w-1/3 max-h-60" key={imgIndex}>
+              <img className="w-full h-full object-cover" src={image} alt={`Outfit ${outfitIndex} Image ${imgIndex}`} />
             </div>
-        ))}
-          </div>
-        ))}
+          ))}
+        </div>
+        
+        {/* Description Overlay (optional) */}
+        <div className="mt-4 text-center">
+          <p className="text-md text-white">{outfit.description}</p>
+        </div>
       </div>
-      <button
-        className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full"
-        onClick={prevSlide}
-      >
-        &#10094;
-      </button>
-      <button
-        className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full"
-        onClick={nextSlide}
-      >
-        &#10095;
-      </button>
-    </div>
+    ))}
+  </div>
+
+  {/* Left Arrow */}
+  <button
+    className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full"
+    onClick={prevSlide}
+  >
+    &#10094;
+  </button>
+
+  {/* Right Arrow */}
+  <button
+    className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full"
+    onClick={nextSlide}
+  >
+    &#10095;
+  </button>
+</div>
+</div>
+
+
 
                 {/* Carousel Section for Outfits */}
                 {/* <div className="my-10">
@@ -254,6 +330,8 @@ const TestPage = () => {
                         ))}
                     </div> */}
 
+                    
+
 
                 
 
@@ -272,13 +350,34 @@ const TestPage = () => {
                     onClose={() => {
                         setIsPopupOpen(false);
                         setIsModalOpen(false);
-                        navigate("/addMeasurements");
+                        navigate("/");
                     }}
                     type={popupType}
                 />
             </div>
+
+
+            <div className="mx-16">
+            <div className="product-grid">
+      {filteredProducts.length > 0 ? (
+        filteredProducts.map((product) => (
+          <ItemView
+            key={product._id}
+            product={product}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            onWishlist={handleWishlist}
+          />
+        ))
+      ) : (
+        <p>No products available.</p>
+      )}
+    </div>
+        </div>
         </div>
     );
 };
 
-export default TestPage;
+export default MyRecommendations;
+
+

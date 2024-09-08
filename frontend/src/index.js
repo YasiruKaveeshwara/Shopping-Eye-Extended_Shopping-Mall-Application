@@ -11,6 +11,7 @@ import ProductDescription from "./pages/ProductDescription.js";
 import SignupDetails from './pages/SignupDetails';
 import AddMeasurements from './pages/Recommendations/AddMeasurements.jsx';
 import ListMeasurements from './pages/Recommendations/ListMeasurements.jsx';
+import MyRecommendations from './pages/Recommendations/MyRecommendations.jsx';
 import UpdateMeasurements from './pages/Recommendations/UpdateMeasurements.jsx';
 // import MyRecommendations from './pages/Recommendations/MyRecommendations.jsx';
 import TestPage from './pages/Recommendations/TestPage.jsx';
@@ -35,9 +36,10 @@ ReactDOM.render(
         <Route path="/profile" element={<SignupDetails />} />
         <Route path="/" element={<AddMeasurements />} />
         <Route path="/listMeasurements" element={<ListMeasurements />} />
+        <Route path="/myRecommendations/:measurementsId" element={<MyRecommendations />} />
         <Route path='/updateMyMeasurements/:measurementsId' element={<UpdateMeasurements />} />
         {/* <Route path='/myRecommendations/:measurementsId' element={<MyRecommendations />} /> */}
-        <Route path='/myRecommendations/:measurementsId' element={<TestPage />} />
+        {/* <Route path='/myRecommendations/:measurementsId' element={<TestPage />} /> */}
 
       </Routes>
       </AuthContextProvider>
