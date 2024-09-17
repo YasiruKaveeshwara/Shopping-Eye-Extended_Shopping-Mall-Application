@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './SignupForm.module.css';
 
-const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
+const SignupForm = ({ shop, onSuccess = () => {} }) => {
   const [form, setForm] = useState({
     shopName: '',
     ownerName: '',
     shopCategory: '',
     location: '',
     phone: '',
-    shopLogo: null, // State for shop logo
+    shopLogo: null,
     email: '',
     password: '',
     confirmPassword: ''
@@ -19,7 +19,6 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
   const isEditing = Boolean(shop);  // Check if we're editing a shop
   const navigate = useNavigate();
 
-  // Populate form if editing a shop
   useEffect(() => {
     if (isEditing && shop) {
       setForm({
@@ -28,12 +27,12 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
         shopCategory: shop.shopCategory || '',
         location: shop.location || '',
         phone: shop.phone || '',
-        shopLogo: null, // Reset shop logo state
+        shopLogo: null,
         email: shop.email || '',
-        password: '', // Keep password empty when editing
-        confirmPassword: '' // Keep confirm password empty when editing
+        password: '',
+        confirmPassword: ''
       });
-      setLogoPreview(shop.shopLogo || '');  // Set logo preview for editing
+      setLogoPreview(shop.shopLogo || '');
     }
   }, [shop, isEditing]);
 
@@ -41,14 +40,14 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
     const { name, value, files } = e.target;
 
     if (name === "phone") {
-      const phoneValue = value.replace(/\D/g, ''); // Remove non-numeric characters
+      const phoneValue = value.replace(/\D/g, ''); 
       if (phoneValue.length <= 10) {
         setForm({ ...form, phone: phoneValue });
       }
     } else {
       setForm({
         ...form,
-        [name]: files ? files[0] : value // Handle file input
+        [name]: files ? files[0] : value 
       });
     }
   };
@@ -59,7 +58,6 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
       shopLogo: e.target.files[0]
     });
 
-    // Display image preview
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -89,12 +87,11 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
       formData.append('location', form.location);
       formData.append('phone', form.phone);
       formData.append('email', form.email);
-      if (form.shopLogo) formData.append('shopLogo', form.shopLogo); // Append file if present
+      if (form.shopLogo) formData.append('shopLogo', form.shopLogo); 
       if (!isEditing) {
         formData.append('password', form.password);
       }
 
-      // Handle signup or update
       const url = isEditing
         ? `http://localhost:3050/api/shops/${shop._id}`
         : 'http://localhost:3050/api/auth/signup';
@@ -108,12 +105,11 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem('token', data.token); // For newly registered shop
-        console.log(`Shop ${isEditing ? 'updated' : 'created'} successfully`);
+        localStorage.setItem('token', data.token);
         setError('');
         onSuccess();
         if (!isEditing) {
-          navigate('/'); // Redirect after successful signup
+          navigate('/'); 
         }
       } else {
         setError(data.message || `Failed to ${isEditing ? 'update' : 'create'} shop. Please try again.`);
@@ -137,6 +133,7 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
             name="shopName"
             value={form.shopName}
             onChange={onUpdateField}
+            placeholder="Enter your shop name"
             required
           />
         </div>
@@ -149,6 +146,7 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
             name="ownerName"
             value={form.ownerName}
             onChange={onUpdateField}
+            placeholder="Enter owner's name"
             required
           />
         </div>
@@ -161,6 +159,7 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
             name="shopCategory"
             value={form.shopCategory}
             onChange={onUpdateField}
+            placeholder="Enter shop category"
             required
           />
         </div>
@@ -173,6 +172,7 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
             name="location"
             value={form.location}
             onChange={onUpdateField}
+            placeholder="Enter location"
             required
           />
         </div>
@@ -185,6 +185,7 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
             name="phone"
             value={form.phone}
             onChange={onUpdateField}
+            placeholder="Enter phone number"
             pattern="\d{10}"
             maxLength="10"
             required
@@ -212,6 +213,7 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
                 name="email"
                 value={form.email}
                 onChange={onUpdateField}
+                placeholder="Enter your email"
                 required
               />
             </div>
@@ -224,6 +226,7 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
                 name="password"
                 value={form.password}
                 onChange={onUpdateField}
+                placeholder="Enter your password"
                 required
               />
             </div>
@@ -236,6 +239,7 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
                 name="confirmPassword"
                 value={form.confirmPassword}
                 onChange={onUpdateField}
+                placeholder="Confirm your password"
                 required
               />
             </div>
@@ -246,8 +250,18 @@ const SignupForm = ({ shop, onSuccess = () => {}, onCancel = () => {} }) => {
 
         <div className={styles.formActions}>
           <button type="submit" className={styles.formSubmitBtn}>{isEditing ? 'Update Shop' : 'Sign Up'}</button>
-          <button type="button" onClick={onCancel} className={styles.formSubmitBtn}>Cancel</button>
         </div>
+
+        {!isEditing && (
+          <div className={styles.registerLink}>
+            <p>
+              Already a shop?{" "}
+              <a href="/" className="text-blue-500 hover:underline">
+                Login here
+              </a>
+            </p>
+          </div>
+        )}
       </form>
     </div>
   );

@@ -66,7 +66,7 @@ export default function Products() {
       
         {editingProduct ? (
           <div>
-            <h3>Edit Product</h3>
+
             <ProductsForm
               product={editingProduct}
               onSuccess={() => {

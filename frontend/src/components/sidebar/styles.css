@@ -103,8 +103,8 @@ body {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
-  background: #e8e5eb;
-  border: 1px solid #e8e5eb;
+  background: #f9f7fa;
+  border: 1px solid #f9f7fa;
   text-align: center;
   padding: 20px;
   height: 445px; /* Reduced height for better aesthetics */
@@ -113,6 +113,18 @@ body {
   justify-content: space-between;
   position: relative; /* Ensure relative positioning for absolute children */
   transition: transform 0.3s, box-shadow 0.3s;
+}
+.product-card p.itemdetails {
+  text-align: left;
+  margin: 10px 0;
+  font-size: 14px;
+  color: #666;
+}
+.product-card h3 {
+  text-align: left;
+  margin: 10px 0;
+  font-size: 16px; /* Adjust the size if needed */
+  color: #333;
 }
 
 .product-card:hover {

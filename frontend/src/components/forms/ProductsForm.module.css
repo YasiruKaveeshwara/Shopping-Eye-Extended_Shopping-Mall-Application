@@ -4,10 +4,11 @@
   align-items: center;
   min-height: 100vh;
   padding: 20px;
+  background-color: #ffffff;
 }
 
 .form {
-  background: #e8e5eb;
+  background: #ffffff;
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);

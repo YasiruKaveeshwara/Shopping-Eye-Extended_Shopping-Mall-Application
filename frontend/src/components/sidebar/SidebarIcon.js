@@ -59,8 +59,8 @@ export default function SidebarIcon() {
         Products
       </Link>
       <Link
-        to="/services"
-        className={location.pathname === "/services" ? "active" : ""}
+        to="/analytics"
+        className={location.pathname === "/analytics" ? "active" : ""}
       >
         <img src={analyticsIcon} alt="Analytics" className="sidebar-icon" />
         Analytics

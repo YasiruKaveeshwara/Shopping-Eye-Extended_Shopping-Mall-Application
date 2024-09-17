@@ -25,7 +25,6 @@ const FeedbackPage = () => {
 
   return (
     <div className="feedback">
-
       <div className="flex">
         {/* Sidebar Component */}
         <SidebarIcon />
@@ -37,7 +36,7 @@ const FeedbackPage = () => {
             <ul>
               {feedbacks.length > 0 ? (
                 feedbacks.map((fb, index) => (
-                  <li key={index} className="border-b border-gray-200 py-2">
+                  <li key={index}>
                     <p className="text-gray-700">{fb.comment}</p>
                     <p className="rating">Rating: {fb.rating}/5</p>
                     <p className="text-sm text-gray-500">- {fb.user || 'Anonymous'}</p>

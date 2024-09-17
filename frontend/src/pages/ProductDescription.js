@@ -39,7 +39,7 @@ function ProductDescription() {
     <>
       <SidebarIcon />
       <div className="product-description-container">
-        <h1>Product Details</h1>
+        <h2>Product Details</h2>
         <div className="product-details">
           <img src={product.imageUrl} alt={product.productName} className="product-image" />
           <div className="product-info">
@@ -54,21 +54,7 @@ function ProductDescription() {
 
           </div>
         </div>
-        {/* Related Products Section */}
-        <div className="related-products">
-          <h3>Related Products</h3>
-          <div className="related-products-grid">
-            {relatedProducts.map((relatedProduct) => (
-              <ItemView
-                key={relatedProduct._id}
-                product={relatedProduct}
-                onEdit={handleEdit} // Define handleEdit function if needed
-                onDelete={handleDelete} // Define handleDelete function if needed
-                onWishlist={handleWishlist} // Define handleWishlist function if needed
-              />
-            ))}
-          </div>
-        </div>
+     
       </div>
     </>
   );

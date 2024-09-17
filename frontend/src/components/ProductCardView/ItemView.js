@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import '../sidebar/styles.css';
-import Heart from '../../images/heart.png';
+//import Heart from '../../images/heart.png';
 import EyeIcon from '../../images/eye.png';
 import EditIcon from '../../images/edit.png';
 import DeleteIcon from '../../images/bin.png';
@@ -16,13 +16,13 @@ function ItemView({ product, onEdit, onDelete, onWishlist }) {
 
   return (
     <div className="product-card">
-      {onWishlist && (
+      {/* {onWishlist && (
         <div className="heart-icon-container">
           <button className="icon-button" onClick={() => onWishlist(product)}>
             <img src={Heart} alt="Wishlist" className="wishlist-icon" />
           </button>
         </div>
-      )}
+      )} */}
       {product.imageUrl && (
         <img
           src={product.imageUrl}
@@ -31,7 +31,7 @@ function ItemView({ product, onEdit, onDelete, onWishlist }) {
         />
       )}
       <h3>{product.productName}</h3>
-      <p>
+      <p className='itemdetails'>
         Price: ${product.price}
         <br />
         Category: {product.category}
