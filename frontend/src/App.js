@@ -12,25 +12,28 @@ import AddProducts from "./pages/AddProducts.js";
 import ProductDescription from "./pages/ProductDescription.js";
 import SignupDetails from './pages/SignupDetails';
 import { AuthContextProvider } from './context/AuthContext.js';
+import { ProductProvider } from './pages/ProductContext.js'; // Import the ProductProvider
 import AnalyticsPage from "./pages/AnalyticsPage.js";
 
 export default function App() {
   return (
     <BrowserRouter>
       <AuthContextProvider>
-        <Routes>
-          <Route path='/' element={<LoginForm />} />
-          <Route path='/services' element={<Services />} />
-          <Route path='/home' element={<Home />} /> 
-          <Route path='/signup' element={<SignupForm />} /> 
-          <Route path='/products' element={<Products />} /> 
-          <Route path='/shops' element={<Shops />} /> 
-          <Route path='/addproducts' element={<AddProducts />} /> 
-          <Route path="/product/:id" element={<ProductDescription />} />
-          <Route path="/profile" element={<SignupDetails />} />
-          <Route path="/feedback" element={<FeedbackPage />} />
-          <Route path="/analytics" element={<AnalyticsPage />} />
-        </Routes>
+      <ProductProvider> {/* Wrap with ProductProvider */}
+          <Routes>
+            <Route path='/' element={<LoginForm />} />
+            <Route path='/services' element={<Services />} />
+            <Route path='/home' element={<Home />} /> 
+            <Route path='/signup' element={<SignupForm />} /> 
+            <Route path='/products' element={<Products />} /> 
+            <Route path='/shops' element={<Shops />} /> 
+            <Route path='/addproducts' element={<AddProducts />} /> 
+            <Route path="/product/:id" element={<ProductDescription />} />
+            <Route path="/profile" element={<SignupDetails />} />
+            <Route path="/feedback" element={<FeedbackPage />} />
+            <Route path="/analytics" element={<AnalyticsPage />} />
+          </Routes>
+        </ProductProvider> {/* Close ProductProvider */}
       </AuthContextProvider>
     </BrowserRouter>
   );

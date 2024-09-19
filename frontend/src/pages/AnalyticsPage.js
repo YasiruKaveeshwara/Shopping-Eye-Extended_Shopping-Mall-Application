@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React from "react";
 import SidebarIcon from "../components/sidebar/SidebarIcon";
 import { BsFillArchiveFill, BsFillGrid3X3GapFill, BsPeopleFill, BsFillBellFill } from "react-icons/bs";
 import {
@@ -13,12 +13,15 @@ import {
   LineChart,
   Line,
   PieChart,
+  ComposedChart,
+  Area,
   Pie,
   Cell,
 } from "recharts";
 import "./Analytics.css";
 import html2canvas from "html2canvas";
 import html2pdf from "html2pdf.js";
+import { useProductContext } from './ProductContext'; // Import the context hook
 
 const data = [
   { name: "Jan", pv: 2400, uv: 4000 },
@@ -51,7 +54,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
   );
 };
 
-const generatePDF = async () => {
+const generatePDF = async (productCount) => {
   // Capture the charts as images using html2canvas
   const chartElements = document.querySelectorAll('.chart');
   const chartImages = [];
@@ -72,16 +75,12 @@ const generatePDF = async () => {
           <tr>
             <th>Total Products</th>
             <th>Wishlist Added</th>
-            <th>Categories</th>
-            <th>Alerts</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>300</td>
-            <td>12</td>
-            <td>33</td>
-            <td>42</td>
+            <td>${productCount}</td> <!-- Use the actual product count here -->
+            <td>12</td> <!-- Static value for wishlist added -->
           </tr>
         </tbody>
       </table>
@@ -108,6 +107,8 @@ const generatePDF = async () => {
 };
 
 export default function AnalyticsPage() {
+  const { productCount } = useProductContext(); // Access product count from context
+
   return (
     <div className="analytics-container">
       <SidebarIcon /> {/* Sidebar with the shop info */}
@@ -115,7 +116,7 @@ export default function AnalyticsPage() {
       <main className="main-content">
         <div className="main-title">
           <h3>ANALYTICS DASHBOARD</h3>
-          <button className="download-btn" onClick={generatePDF}>Download Analytics</button>
+          <button className="download-btn" onClick={() => generatePDF(productCount)}>Download Analytics</button>
         </div>
 
         {/* Cards Section */}
@@ -124,28 +125,14 @@ export default function AnalyticsPage() {
             <div className="card-inner">
               <h3>TOTAL PRODUCTS</h3>
             </div>
-            <h1>300</h1>
+            <h1>{productCount}</h1> {/* Display product count */}
           </div>
 
           <div className="card">
             <div className="card-inner">
               <h3>WISHLIST ADDED</h3>
             </div>
-            <h1>12</h1>
-          </div>
-
-          <div className="card">
-            <div className="card-inner">
-              <h3>CATEGORIES</h3>
-            </div>
-            <h1>33</h1>
-          </div>
-
-          <div className="card">
-            <div className="card-inner">
-              <h3>ALERTS</h3>
-            </div>
-            <h1>42</h1>
+            <h1>12</h1> {/* Static value for wishlist added */}
           </div>
         </div>
 
@@ -167,7 +154,51 @@ export default function AnalyticsPage() {
               </ResponsiveContainer>
             </div>
 
+
             <div className="chart">
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={data}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="pv" fill="#8884d8" />
+                <Bar dataKey="uv" fill="#82ca9d" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          </div>
+
+
+
+          <div className="chart-row">
+          <div className="chart">
+              <ResponsiveContainer width="100%" height={300}>
+                <ComposedChart
+                  width={500}
+                  height={400}
+                  data={data}
+                  margin={{
+                    top: 20,
+                    right: 20,
+                    bottom: 20,
+                    left: 20,
+                  }}
+                >
+                  <CartesianGrid stroke="#f5f5f5" />
+                  <XAxis dataKey="name" scale="band" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Area type="monotone" dataKey="amt" fill="#8884d8" stroke="#8884d8" />
+                  <Bar dataKey="pv" barSize={20} fill="#413ea0" />
+                  <Line type="monotone" dataKey="uv" stroke="#ff7300" />
+                </ComposedChart>
+              </ResponsiveContainer>
+            </div>
+            
+          <div className="chart">
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart width={400} height={400}>
                   <Pie
@@ -189,19 +220,8 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          <div className="chart1">
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={data}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="pv" fill="#8884d8" />
-                <Bar dataKey="uv" fill="#82ca9d" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+
+         
         </div>
       </main>
     </div>

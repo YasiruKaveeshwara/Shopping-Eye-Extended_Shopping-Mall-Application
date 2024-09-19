@@ -4,11 +4,14 @@ import SidebarIcon from '../components/sidebar/SidebarIcon';
 import ProductsForm from '../components/forms/ProductsForm';
 import ItemView from '../components/ProductCardView/ItemView'; // Import ItemView component
 import '../components/sidebar/styles.css';
+import { useProductContext } from './ProductContext'; // Import the context hook
 
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
   const [shopName, setShopName] = useState('');
+  
+  const { setProductCount } = useProductContext(); // Get the setter function from context
 
   useEffect(() => {
     // Get shop name from local storage
@@ -26,6 +29,7 @@ export default function Products() {
       // Filter products based on shopName
       const filteredProducts = data.filter(product => product.shopName === shopName);
       setProducts(filteredProducts);
+      setProductCount(filteredProducts.length); // Update product count in context
     } catch (error) {
       console.error('Error fetching products:', error);
     }
@@ -39,6 +43,7 @@ export default function Products() {
       const data = await response.json();
       if (response.ok) {
         setProducts(products.filter((product) => product._id !== id));
+        setProductCount(products.length - 1); // Update product count in context
         alert(data.message);
       } else {
         alert(data.message);
@@ -60,13 +65,15 @@ export default function Products() {
     <>
       <SidebarIcon />
       <div className="main">
-        <h2 className='heading'>Products   <Link to="/addproducts">
-          <button className="add-button">Add Product</button>
-        </Link></h2>
+        <h2 className='heading'>
+          Products
+          <Link to="/addproducts">
+            <button className="add-button">Add Product</button>
+          </Link>
+        </h2>
       
         {editingProduct ? (
           <div>
-
             <ProductsForm
               product={editingProduct}
               onSuccess={() => {

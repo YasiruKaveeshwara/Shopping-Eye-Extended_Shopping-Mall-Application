@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SidebarIcon from "../components/sidebar/SidebarIcon";
-import ItemView from '../components/ProductCardView/ItemView'; // Import ItemView component
+import PopularItemView from '../components/ProductCardView/PopularItemView'; // Import ItemView component
 import "../components/sidebar/styles.css";
 
 export default function Home() {
@@ -68,7 +68,7 @@ export default function Home() {
         <div className="product-grid">
           {products.length > 0 ? (
             products.map((product) => (
-              <ItemView
+              <PopularItemView
                 key={product._id}
                 product={product}
                 onEdit={handleEdit}
