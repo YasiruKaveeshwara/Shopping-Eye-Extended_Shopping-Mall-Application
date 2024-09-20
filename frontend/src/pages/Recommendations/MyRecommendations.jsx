@@ -131,7 +131,7 @@ const TestPage = () => {
         // Fetch measurements data based on measurementsId when the component mounts
         async function getMyMeasurements() {
             try {
-                const response = await axios.get(`http://localhost:3050/measurement/getUserMeasurements/${measurementsId}`);
+                const response = await axios.get(`http://localhost:3050/api/measurements/getUserMeasurements/${measurementsId}`)
                 setSelectedMeasurements(response.data.userMeasurements);
                 console.log("Fetched Measurements Details Successfully");
             } catch (error) {
@@ -145,7 +145,7 @@ const TestPage = () => {
     const confirmDelete = async () => {
         if (selectedMeasurements && selectedMeasurements._id) {
             try {
-                await axios.delete(`http://localhost:3050/measurement/deleteMyMeasurements/${selectedMeasurements._id}`);
+                await axios.delete(`http://localhost:3050/api/measurements/deleteMyMeasurements/${selectedMeasurements._id}`);
                 setIsModalOpen(false); // Close the modal
                 setPopupMessage("Measurements Deleted Successfully!");
                 setPopupType('info');
@@ -311,7 +311,7 @@ const TestPage = () => {
 
 
                 {/* Carousel Section for Outfits */}
-                {/* <div className="my-10">
+                <div className="my-10">
                         <h2 className="text-2xl font-bold text-center text-green-800 mb-6">Recommended Outfits</h2>
                         {outfitData.map((outfit, index) => (
                             <div key={index} className="my-8">
@@ -328,7 +328,7 @@ const TestPage = () => {
                                 </Slider>
                             </div>
                         ))}
-                    </div> */}
+                    </div>
 
                     
 

@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect  } from 'react'
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
-import { Link } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import bgblue from '../../../src/assets/recommendations/bgblue1.jpg'; // Background image
 import CustomPopup from '../Recommendations/Components/CustomPopup'; // Modal component
 import Carousel from '../Recommendations/Components/Carousel'; // Modal component
@@ -30,10 +30,39 @@ const AddMeasurements = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
+  const { measurementsId } = useParams(); // Get the eventId from URL params
+  const [selectedMeasurements, setSelectedMeasurements] = useState(null);
 
   const imagesBust = [bust1, bust2, bust3, bust4];
   const imagesWaist = [waist1, waist2, waist3, waist4, waist5];
   const imagesHip = [hip1, hip2, hip3, hip4];
+
+
+  useEffect(() => {
+    if (measurementsId) {
+      // Only trigger this effect if measurementsId exists
+      axios
+        .get(`http://localhost:3050/api/measurements/getUserMeasurements/${measurementsId}`)
+        .then(response => {
+          console.log(response.data); // Check the data structure here
+          setSelectedMeasurements(response.data.userMeasurements); // Set the measurements data
+        })
+        .catch(error => {
+          console.error('There was an error fetching the measurements!', error);
+        });
+    }
+  }, [measurementsId]);
+
+
+  useEffect(() => {
+    if (selectedMeasurements) {
+      setBust(selectedMeasurements.bust || '');
+      setWaist(selectedMeasurements.waist || '');
+      setHip(selectedMeasurements.hip || '');
+    }
+  }, [selectedMeasurements]);
+
+
 
   function validateInput(name, value) {
     switch (name) {
@@ -74,40 +103,54 @@ const AddMeasurements = () => {
 
   function sendData(e) {
     e.preventDefault();
-
-    const validationErrors = Object.keys(errors).reduce((acc, key) => {
-      const error = validateInput(key, eval(key));
-      if (error) acc[key] = error;
-      return acc;
-    }, {});
-
-    if (Object.keys(validationErrors).length > 0) {
+  
+    // Validate input before sending data
+    const validationErrors = {
+      bust: validateInput('bust', bust),
+      waist: validateInput('waist', waist),
+      hip: validateInput('hip', hip)
+    };
+  
+    if (Object.values(validationErrors).some((error) => error !== "")) {
       setErrors(validationErrors);
       return;
     }
-
-    const newMeasurements = {
+  
+    const measurementsData = {
       bust,
       waist,
       hip
-    }
-
-    axios.post("http://localhost:3050/measurement/saveMeasurements", newMeasurements)
-      .then(() => {
-        setPopupMessage("Measurements Saved successfully!");
-        setPopupType('info');
-        setIsPopupOpen(true);
-
-        // Resetting input fields
-        setBust("");
-        setWaist("");
-        setHip("");
-      }).catch((err) => {
-        setPopupMessage("Error Saving Measurements. Please try again.");
-        setPopupType('error');
-        setIsPopupOpen(true);
-      })
+    };
+  
+    // Handle success and error responses
+    const handleResponse = (message, type) => {
+      setPopupMessage(message);
+      setPopupType(type);
+      setIsPopupOpen(true);
+  
+      // Reset input fields
+      setBust("");
+      setWaist("");
+      setHip("");
+    };
+  
+    const handleError = (message) => {
+      setPopupMessage(message);
+      setPopupType('error');
+      setIsPopupOpen(true);
+    };
+  
+    // Make the appropriate API request
+    const request = measurementsId
+      ? axios.put(`http://localhost:3050/api/measurements/updateMyMeasurements/${measurementsId}`, measurementsData)
+      : axios.post("http://localhost:3050/api/measurements/saveMeasurements", measurementsData);
+  
+    // Handle the response for both PUT and POST
+    request
+      .then(() => handleResponse("Measurements saved/updated successfully!", 'info'))
+      .catch(() => handleError("Error saving/updating measurements. Please try again."));
   }
+  
 
   return (
     <div className="relative min-h-screen">
@@ -180,7 +223,6 @@ Step 3: Make sure the tape is snug but not tight — it should not compress your
             <h1 className="text-xl font-bold text-green-800 font-inika">Waist Measurement</h1>
             <h6 className="flex items-center text-sm text-gray-600 font-lexend">
            Step 1: Using your fingers, locate your waist by placing your thumbs at the base of your rib cage and your index fingers at the top of your hips. Your waist will be the narrowest part of your torso.<br /><br />
-
 Step 2: Stand up straight, exhale slowly, and wrap the measuring tape around your body from your navel to your back. Ensure that the tape connects at the front.<br /><br />
 
 Step 3: The tape should be parallel to the floor and snug around your torso without digging in.<br /><br />
@@ -249,7 +291,7 @@ Step 4: Make sure the tape is snug but not tight — it should not compress your
   
       </div>
       {/* Measurement Box 3 Ends*/}
-
+      
       <center>
               <br />
               <div className="flex justify-center mt-5">

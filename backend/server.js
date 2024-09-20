@@ -10,7 +10,7 @@ dotenv.config();
 
 const app = express();
 
-const measurementRouter = require("./routes/measurements"); // Import routes
+// const measurementsRouter = require("./routes/measurements"); // Import routes
 
 const PORT = process.env.PORT || 3050;
 
@@ -38,7 +38,7 @@ connection.once("open", () => {
 app.use('/api', authRoutes);
 app.use('/api/auth', authRoutes);
 // Routes
-app.use("/measurement", measurementRouter);
+// app.use("/measurements", measurementRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

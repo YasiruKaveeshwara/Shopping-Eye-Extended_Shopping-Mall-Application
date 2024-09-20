@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import ConfirmDeletion from '../Recommendations/Components/ConfirmDeletion'; // Import the modal component // Import the modal component
 
 
-const MeasurementsTable = () => {
+const ListMeasurements = () => {
     const [measurements, setMeasurements] = useState([]);
     const [selectedMeasurementsId, setSelectedMeasurementsId] = useState(null);
 
@@ -17,8 +17,9 @@ const MeasurementsTable = () => {
     useEffect(() => {
       const fetchMeasurements = async () => {
         try {
-          const response = await axios.get('http://localhost:3050/measurement/allMeasurements');
-          setMeasurements(response.data);
+          const response = await fetch('http://localhost:3050/api/measurements');
+          const data = await response.json();
+          setMeasurements(data);
         } catch (error) {
           console.error('Error fetching Measurements list:', error);
         }
@@ -27,6 +28,7 @@ const MeasurementsTable = () => {
       fetchMeasurements();
     }, []);
 
+  
 
     const handleDeleteClick = (measurementsId) => {
         setSelectedMeasurementsId(measurementsId); // Set the option ID to state
@@ -38,7 +40,7 @@ const MeasurementsTable = () => {
     const confirmDelete = async () => {
         if (selectedMeasurementsId) {
           try {
-            await axios.delete(`http://localhost:3050/measurement/deleteMyMeasurements/${selectedMeasurementsId}`);
+            await axios.delete(`http://localhost:3050/api/measurements/deleteMyMeasurements/${selectedMeasurementsId}`);
             setIsModalOpen(false); // Close the modal
             // Custom success notification
             setPopupMessage("Measurements Deleted Successfully!");
@@ -116,9 +118,9 @@ const MeasurementsTable = () => {
 
               <td>
               <Link to={`/myRecommendations/${measurement._id}`} className="ml-5 mr-4 flex items-center text-white text-xl font-mclaren px-3 py-1  bg-green-500 hover:bg-green-800   rounded-3xl">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
 </svg>
   </Link>
               </td>
@@ -149,6 +151,6 @@ const MeasurementsTable = () => {
   );
 }
 
-export default MeasurementsTable;
+export default ListMeasurements;
 
 

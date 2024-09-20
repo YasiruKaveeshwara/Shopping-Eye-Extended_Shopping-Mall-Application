@@ -27,22 +27,39 @@ const UpdateMesurements = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Fetch measurements data based on measurementsId when the component mounts
-    async function getMyMeasurements() {
-      try {
-        const response = await axios.get(`http://localhost:3050/measurement/getUserMeasurements/${measurementsId}`);
-        setSelectedMeasurements(response.data.userMeasurements);
-        console.log("Fetched Measurements Details Successfully");
+  // useEffect(() => {
+  //   // Fetch measurements data based on measurementsId when the component mounts
+  //   async function getMyMeasurements() {
+  //     try {
+  //       const response = axios.get(`http://localhost:3050/api/measurement/getUserMeasurements/${measurementsId}`);
+  //       setSelectedMeasurements(response.data);
+  //       console.log("Fetched Measurements Details Successfully");
        
-      } catch (error) {
-        console.error("Error fetching Measurements data:", error.message);
-        alert("Error fetching Measurements data. Please try again.");
-      }
-    }
+  //     } catch (error) {
+  //       console.error("Error fetching Measurements data:", error.message);
+  //       alert("Error fetching Measurements data. Please try again.");
+  //     }
+  //   }
 
-    getMyMeasurements();
+  //   getMyMeasurements();
+  // }, [measurementsId]);
+
+
+  useEffect(() => {
+    // Fetch product details from the server
+    axios.get(`http://localhost:3050/api/measurements/getUserMeasurements/${measurementsId}`)
+      .then(response => {
+        console.log(response.data); // Check the data structure here
+        setSelectedMeasurements(response.data.userMeasurements); // Set the product data retrieved from the server
+
+
+      })
+      .catch(error => {
+        console.error("There was an error fetching the product!", error);
+      });
   }, [measurementsId]);
+
+
 
 
   useEffect(() => {
@@ -138,7 +155,7 @@ if (Object.values(validationErrors).some((error) => error !== "")) {
   console.log("Sending Data:", updateMyMeasurements); // Log data to be sent
 
 
-    axios.put(`http://localhost:3050/measurement/updateMyMeasurements/${measurementsId}`, updateMyMeasurements)
+    axios.put(`http://localhost:3050/api/measurements/updateMyMeasurements/${measurementsId}`, updateMyMeasurements)
     .then(() => {
         // Custom success notification
        setPopupMessage("Measurements Updated successfully!");

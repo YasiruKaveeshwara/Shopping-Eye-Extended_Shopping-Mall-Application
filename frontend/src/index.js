@@ -34,10 +34,10 @@ ReactDOM.render(
         <Route path='/addproducts' element={<AddProducts />} /> 
         <Route path="/product/:id" element={<ProductDescription />} />
         <Route path="/profile" element={<SignupDetails />} />
-        <Route path="/" element={<AddMeasurements />} />
+        <Route path="/" element={<TestPage />} />
         <Route path="/listMeasurements" element={<ListMeasurements />} />
         <Route path="/myRecommendations/:measurementsId" element={<MyRecommendations />} />
-        <Route path='/updateMyMeasurements/:measurementsId' element={<UpdateMeasurements />} />
+        <Route path='/updateMyMeasurements/:measurementsId' element={<TestPage />} />
         {/* <Route path='/myRecommendations/:measurementsId' element={<MyRecommendations />} /> */}
         {/* <Route path='/myRecommendations/:measurementsId' element={<TestPage />} /> */}
 

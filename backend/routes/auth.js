@@ -2,9 +2,11 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
 const itemController = require('../controllers/itemController');
-const feedbackController = require('../controllers/feedbackController'); 
+const feedbackController = require('../controllers/feedbackController');
+const measurementController = require('../controllers/measurementController');
 const ShopModel = require('../models/Shop.js');
 const ItemModel = require('../models/Item.js');
+// const Measurement = require('../models/Measurement.js');
 const upload = require('../config/multer');
 
 // Signup route
@@ -61,5 +63,17 @@ router.get('/feedback/:shopId', feedbackController.getFeedbackByShop);
 
 // Route to get all feedback (for an admin page if needed)
 router.get('/feedback', feedbackController.getAllFeedback);
+
+
+
+
+// Routes for Measurements
+router.post('/measurements/saveMeasurements', measurementController.saveMeasurements);
+router.get('/measurements', measurementController.getAllMeasurements);
+router.put('/measurements/updateMyMeasurements/:id', measurementController.updateMeasurements);
+router.delete('/measurements/deleteMyMeasurements/:id', measurementController.deleteMeasurements);
+router.get('/measurements/getUserMeasurements/:id', measurementController.getUserMeasurements);
+
+
 
 module.exports = router;
