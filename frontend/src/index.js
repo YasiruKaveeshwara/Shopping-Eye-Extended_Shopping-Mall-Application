@@ -12,8 +12,9 @@ import SignupDetails from './pages/SignupDetails';
 import AddMeasurements from './pages/Recommendations/AddMeasurements.jsx';
 import ListMeasurements from './pages/Recommendations/ListMeasurements.jsx';
 import MyRecommendations from './pages/Recommendations/MyRecommendations.jsx';
+import BodyTypeForm from './pages/Recommendations/BodyTypeForm.jsx';
+import ListBodyTypes from './pages/Recommendations/ListBodyTypes.jsx';
 import UpdateMeasurements from './pages/Recommendations/UpdateMeasurements.jsx';
-// import MyRecommendations from './pages/Recommendations/MyRecommendations.jsx';
 import TestPage from './pages/Recommendations/TestPage.jsx';
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -34,10 +35,13 @@ ReactDOM.render(
         <Route path='/addproducts' element={<AddProducts />} /> 
         <Route path="/product/:id" element={<ProductDescription />} />
         <Route path="/profile" element={<SignupDetails />} />
-        <Route path="/" element={<TestPage />} />
+        <Route path="/" element={<AddMeasurements />} />
         <Route path="/listMeasurements" element={<ListMeasurements />} />
         <Route path="/myRecommendations/:measurementsId" element={<MyRecommendations />} />
-        <Route path='/updateMyMeasurements/:measurementsId' element={<TestPage />} />
+        <Route path='/updateMyMeasurements/:measurementsId' element={<AddMeasurements />} />
+        <Route path='/bodyTypeForm' element={<BodyTypeForm />} />
+        <Route path='/updateBodyType/:bodyTypeId' element={<BodyTypeForm />} />
+        <Route path='/listBodyTypes' element={<ListBodyTypes />} />
         {/* <Route path='/myRecommendations/:measurementsId' element={<MyRecommendations />} /> */}
         {/* <Route path='/myRecommendations/:measurementsId' element={<TestPage />} /> */}
 

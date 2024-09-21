@@ -1,330 +1,156 @@
-import React, { useState, useEffect  } from 'react'
-import axios from "axios"
-import { useNavigate } from "react-router-dom"
-import { useParams, Link } from "react-router-dom"
-import bgblue from '../../../src/assets/recommendations/bgblue1.jpg'; // Background image
-import CustomPopup from '../Recommendations/Components/CustomPopup'; // Modal component
-import Carousel from '../Recommendations/Components/Carousel'; // Modal component
-import ListMeasurements from '../Recommendations/ListMeasurements'
-import bust1 from '../../../src/assets/recommendations/bust1.jpg'; // Image for Bust measurement guide
-import bust2 from '../../../src/assets/recommendations/bust2.jpg'; // Image for Waist measurement guide
-import bust3 from '../../../src/assets/recommendations/bust3.jpg'; // Image for Hip measurement guide
-import bust4 from '../../../src/assets/recommendations/bust4.jpg'; // Image for Hip measurement guide
-import waist1 from '../../../src/assets/recommendations/waist1.jpg'; // Image for Hip measurement guide
-import waist2 from '../../../src/assets/recommendations/waist2.jpg'; // Image for Hip measurement guide
-import waist3 from '../../../src/assets/recommendations/waist3.jpg'; // Image for Hip measurement guide
-import waist4 from '../../../src/assets/recommendations/waist4.jpg'; // Image for Hip measurement guide
-import waist5 from '../../../src/assets/recommendations/waist5.jpg'; // Image for Hip measurement guide
-import hip1 from '../../../src/assets/recommendations/hip1.webp'; // Image for Hip measurement guide
-import hip2 from '../../../src/assets/recommendations/hip2.jpg'; // Image for Hip measurement guide
-import hip3 from '../../../src/assets/recommendations/hip3.jpg'; // Image for Hip measurement guide
-import hip4 from '../../../src/assets/recommendations/hip4.webp'; // Image for Hip measurement guide
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import ConfirmDeletion from '../Recommendations/Components/ConfirmDeletion'; // Import the modal component // Import the modal component
 
-const AddMeasurements = () => {
-  const [bust, setBust] = useState("");
-  const [waist, setWaist] = useState("");
-  const [hip, setHip] = useState("");
+
+const ListMeasurements = () => {
+  const [bodyTypes, setBodyTypes] = useState([]);
+  const [selectedBodyTypesId, setSelectedBodyTypesId] = useState(null);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
   const [popupType, setPopupType] = useState('info'); // 'info' or 'error'
-  const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
-
-  const { measurementsId } = useParams(); // Get the eventId from URL params
-  const [selectedMeasurements, setSelectedMeasurements] = useState(null);
-
-  const imagesBust = [bust1, bust2, bust3, bust4];
-  const imagesWaist = [waist1, waist2, waist3, waist4, waist5];
-  const imagesHip = [hip1, hip2, hip3, hip4];
 
 
-  useEffect(() => {
-    if (measurementsId) {
-      // Only trigger this effect if measurementsId exists
-      axios
-        .get(`http://localhost:3050/api/measurements/getUserMeasurements/${measurementsId}`)
-        .then(response => {
-          console.log(response.data); // Check the data structure here
-          setSelectedMeasurements(response.data.userMeasurements); // Set the measurements data
-        })
-        .catch(error => {
-          console.error('There was an error fetching the measurements!', error);
-        });
-    }
-  }, [measurementsId]);
-
-
-  useEffect(() => {
-    if (selectedMeasurements) {
-      setBust(selectedMeasurements.bust || '');
-      setWaist(selectedMeasurements.waist || '');
-      setHip(selectedMeasurements.hip || '');
-    }
-  }, [selectedMeasurements]);
-
-
-
-  function validateInput(name, value) {
-    switch (name) {
-      case 'bust':
-        if (value < 1) return "Enter Bust";
-        return "";
-      case 'waist':
-        if (value < 1) return "Enter Waist";
-        return "";
-      case 'hip':
-        if (value < 1) return "Enter Hip";
-        return "";
-      default:
-        return "";
-    }
-  }
-
-  function handleInputChange(e) {
-    const { name, value } = e.target;
-    setErrors({
-      ...errors,
-      [name]: validateInput(name, value)
-    });
-    switch (name) {
-      case 'bust':
-        setBust(value);
-        break;
-      case 'waist':
-        setWaist(value);
-        break;
-      case 'hip':
-        setHip(value);
-        break;
-      default:
-        break;
-    }
-  }
-
-  function sendData(e) {
-    e.preventDefault();
+    useEffect(() => {
+      const fetchBodyTypes = async () => {
+        try {
+          const response = await fetch('http://localhost:3050/api/bodyTypes/getAllBodyTypes');
+          const data = await response.json();
+          setBodyTypes(data);
+        } catch (error) {
+          console.error('Error fetching BodyTypes list:', error);
+        }
+      };
   
-    // Validate input before sending data
-    const validationErrors = {
-      bust: validateInput('bust', bust),
-      waist: validateInput('waist', waist),
-      hip: validateInput('hip', hip)
-    };
+      fetchBodyTypes();
+    }, []);
+
   
-    if (Object.values(validationErrors).some((error) => error !== "")) {
-      setErrors(validationErrors);
-      return;
-    }
+
+    const handleDeleteClick = (bodyTypesId) => {
+        setSelectedBodyTypesId(bodyTypesId); // Set the option ID to state
+        setIsModalOpen(true); // Show the modal
+      };
+
+
+
+    const confirmDelete = async () => {
+        if (selectedBodyTypesId) {
+          try {
+            await axios.delete(`http://localhost:3050/api/bodyTypes/deleteBodyType/${selectedBodyTypesId}`);
+            setIsModalOpen(false); // Close the modal
+            // Custom success notification
+            setPopupMessage("BodyType Deleted Successfully!");
+            setPopupType('info');
+            setIsPopupOpen(true);
+            setBodyTypes(bodyTypes.filter(bodyType => bodyType._id !== selectedBodyTypesId)); // Update state to remove the item
+          } catch (error) {
+            console.error("Error deleting Body Type:", error.message);
+            // Custom error notification
+            setPopupMessage("Error deleting Body Types. Please try again.");
+            setPopupType('error');
+            setIsPopupOpen(true);
+          }
+        }
+      };
   
-    const measurementsData = {
-      bust,
-      waist,
-      hip
-    };
-  
-    // Handle success and error responses
-    const handleResponse = (message, type) => {
-      setPopupMessage(message);
-      setPopupType(type);
-      setIsPopupOpen(true);
-  
-      // Reset input fields
-      setBust("");
-      setWaist("");
-      setHip("");
-    };
-  
-    const handleError = (message) => {
-      setPopupMessage(message);
-      setPopupType('error');
-      setIsPopupOpen(true);
-    };
-  
-    // Make the appropriate API request
-    const request = measurementsId
-      ? axios.put(`http://localhost:3050/api/measurements/updateMyMeasurements/${measurementsId}`, measurementsData)
-      : axios.post("http://localhost:3050/api/measurements/saveMeasurements", measurementsData);
-  
-    // Handle the response for both PUT and POST
-    request
-      .then(() => handleResponse("Measurements saved/updated successfully!", 'info'))
-      .catch(() => handleError("Error saving/updating measurements. Please try again."));
-  }
-  
+
 
   return (
     <div className="relative min-h-screen">
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 z-0 bg-fixed"
-        style={{
-          backgroundImage: `url(${bgblue})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      ></div>
-
-      {/* Content Wrapper */}
       
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen">
-        <div className="container my-10 max-w-5xl mx-auto p-10 bg-white opacity-90 shadow-2xl shadow-blue-400 rounded-[5px] overflow-auto font-lexend">
-            
-        <div className="text-5xl font-extrabold ...">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-800 to-black justify-center">
-              Enter Measurements
-            </span>
-          </div>
-
-        <form className="mt-3" onSubmit={sendData}>
-
-{/* Measurement Box 1*/}
-        <div className="grid grid-cols-2 gap-16 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 mt-4 mb-4">
-    <div className="container shadow-md rounded-md overflow-hidden w-full max-h-80 mt-7">
-
-      <Carousel images={imagesBust} />
-
-    </div>
-        <div className="px-0 py-2">
-
-            {/* with Lexend font */}
-            <h1 className="text-xl font-bold text-green-800 font-inika">Bust Measurement</h1>
-            <h6 className="flex items-center text-sm text-gray-600 font-lexend">
-Step 1: Stand straight with your feet together, keeping your arms relaxed at your sides.<br /><br />
-Step 2: Wrap a measuring tape around the fullest part of your bust, typically across your nipples and around your back. Ensure the tape is parallel to the ground and lies flat against your body.<br /><br />
-Step 3: Make sure the tape is snug but not tight — it should not compress your chest. Take a deep breath in and out, then note the measurement where the end of the tape meets the rest.<br /><br /></h6>
-            <div className="flex  mt-2">
-            <label className="block font-bold text-lg text-blue-800 mr-3" htmlFor="bust">Bust</label>
-              <input className="w-28 p-1 border border-gray-200 rounded text-base font-lexend form-check"
-                type="number" placeholder="Enter Bust" name="bust" value={bust}
-                onChange={handleInputChange}
-              />
-              <p className="flex items-center text-base font-bold text-green-600 pr-12 ml-3">cm</p>
-            </div>
-            {errors.bust && <div className="text-red-600">{errors.bust}</div>}
-
-                   
-        </div>  
   
+    {/* Content Wrapper */}
+    <div className="relative z-10 flex flex-col items-center  min-h-screen">
+
+    <Link to="/bodyTypeForm" className="flex items-center ml-5 mb-4 mt-5 text-white text-xl font-mclaren px-2 py-1 bg-blue-500 hover:bg-blue-800 rounded-3xl">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mr-1">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>Add Body Type
+          </Link>
+
+            
+  
+      {/* Your scrolling content */}
+      {/* {allEvents && allEvents.map((event) => ( */}
+      <h2 className="text-2xl font-bold text-blue-800 mt-10 mb-4">BodyTypes List</h2>
+      <div className="shadow-2xl shadow-theme-blue rounded-3xl overflow-hidden">
+        <table className="min-w-full leading-normal opacity-80 bg-white">
+          <thead className="font-bold text-left text-blue-800 bg-blue-100 rounded-t-3xl">
+            <tr>
+              <th className="px-5 py-3 border-b-2 border-gray-200">Name</th>
+              <th className="px-5 py-3 border-b-2 border-gray-200">Description</th>
+              <th className="px-5 py-3 border-b-2 border-gray-200">Image</th>
+            </tr>
+          </thead>
+          <tbody>
+
+  {bodyTypes.map((bodyType) => (
+      <tr key={bodyType._id} className="border-b border-gray-200 hover:bg-blue-50 hover:opacity-50 ">
+        <td className="px-5 py-2">{bodyType.name}</td>
+        <td className="px-5 py-2">{bodyType.description}</td>
+        <td className="px-5 py-2"> <img
+          src={bodyType.imageUrl}
+          alt={bodyType.name}
+          className="product-image"
+        /></td>
+        <td>
+              <Link to={`/updateBodyType/${bodyType._id}`} className="flex items-center text-white text-xl font-mclaren px-3 py-1  bg-blue-500 hover:bg-blue-800   rounded-3xl">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mr-1">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+              </svg> </Link>
+              </td>
+
+              <td>
+              <button className="ml-5 flex items-center text-white text-xl font-mclaren px-3 py-1  bg-red-500 hover:bg-red-800 rounded-3xl" 
+               onClick={() => {
+                setSelectedBodyTypesId(bodyType._id);
+                setIsModalOpen(true);
+              }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mr-1">
+              <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+            </svg>  </button>
+              </td>
+
+              <td>
+              <Link to={`/myRecommendations/${bodyType._id}`} className="ml-5 mr-4 flex items-center text-white text-xl font-mclaren px-3 py-1  bg-green-500 hover:bg-green-800   rounded-3xl">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+</svg>
+  </Link>
+              </td>
+      </tr>
+  ))}
+</tbody>
+
+        </table>
       </div>
-      {/* Measurement Box 1 Ends*/}
 
-<hr></hr>
-
-      {/* Measurement Box 2 */}
-      <div className="grid grid-cols-2 gap-16 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 mt-4 mb-4" >
-    <div className="container shadow-md rounded-md overflow-hidden w-full max-h-80 mt-7">
-    <Carousel images={imagesWaist} />
-    </div>
-        <div className="px-0 py-4">
+      {/* Use the Confirm Deletion Modal here */}
+      <ConfirmDeletion
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={confirmDelete}
+      />
 
 
-            
-            {/* Event Date with Lexend font */}
-            <h1 className="text-xl font-bold text-green-800 font-inika">Waist Measurement</h1>
-            <h6 className="flex items-center text-sm text-gray-600 font-lexend">
-           Step 1: Using your fingers, locate your waist by placing your thumbs at the base of your rib cage and your index fingers at the top of your hips. Your waist will be the narrowest part of your torso.<br /><br />
-Step 2: Stand up straight, exhale slowly, and wrap the measuring tape around your body from your navel to your back. Ensure that the tape connects at the front.<br /><br />
-
-Step 3: The tape should be parallel to the floor and snug around your torso without digging in.<br /><br />
-
-Step 4: Write down the number where the ends of the tape meet. This is your waist measurement.<br /><br /></h6>
-            
-
-            <div className="flex  mt-2">
-            <label className="block font-bold text-lg text-blue-800 mr-3" htmlFor="waist">Waist</label>
-              <input className="w-28 p-1 border border-gray-200 rounded text-base font-lexend form-check"
-                type="number" placeholder="Enter Waist" name="waist" value={waist}
-                onChange={handleInputChange}
-              />
-             
-
-              <p className="flex items-center text-base font-bold text-green-600 pr-12 ml-3">cm</p>
-              
-            </div>
-            {errors.waist && <div className="text-red-600">{errors.waist}</div>}
+    {/* Scrolling content End*/}
   
-           
-  
-            
-                      
-        </div>  
-        
-  
-      </div>
-      {/* Measurement Box 2 Ends*/}
-
-<hr></hr>
-      {/* Measurement Box 3*/}
-      <div className="grid grid-cols-2 gap-16 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 mt-4 mb-4">
-    <div className="container shadow-md rounded-md overflow-hidden w-full max-h-80 mt-7">
-    <Carousel images={imagesHip} />
-    </div>
-        <div className="px-0 py-4">
-
-            
-            
-            {/* with Lexend font */}
-            <h1 className="text-xl font-bold text-green-800 font-inika">Hip Measurement</h1>
-            <h6 className="flex items-center text-sm text-gray-600 font-lexend">
-Step 2: Stand straight with your feet together, keeping your arms relaxed at your sides.<br /><br />
-Step 3: Wrap a measuring tape around the fullest part of your bust, typically across your nipples and around your back. Ensure the tape is parallel to the ground and lies flat against your body.<br /><br />
-Step 4: Make sure the tape is snug but not tight — it should not compress your chest. Take a deep breath in and out, then note the measurement where the end of the tape meets the rest.<br /><br /></h6>
-
-            <div className="flex  mt-2">
-            <label className="block font-bold text-lg text-blue-800 mr-3" htmlFor="hip">Hip</label>
-              <input className="w-28 p-1 border border-gray-200 rounded text-base font-lexend form-check"
-                type="number" placeholder="Enter Hip" name="hip" value={hip}
-                onChange={handleInputChange}
-              />
-              
-
-              <p className="flex items-center text-base font-bold text-green-600 pr-12 ml-3">cm</p>
-            </div>
-            {errors.hip && <div className="text-red-600">{errors.hip}</div>}
-  
-  
-            
-            
-                      
-        </div>  
-        
-  
-      </div>
-      {/* Measurement Box 3 Ends*/}
       
-      <center>
-              <br />
-              <div className="flex justify-center mt-5">
-                <button className="flex items-center bg-blue-700 text-white text-lg px-6 py-2 border border-blue-800 rounded-full cursor-pointer font-bold hover:bg-blue-400 hover:border-blue-950" type="submit" name="submit" id="submit">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mr-1">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                  </svg> Proceed
-                </button>
-
-                <Link to={`/listMeasurements`} className="flex items-center ml-24 bg-red-700 text-white text-lg px-3 py-2 border border-red-800 rounded-full cursor-pointer font-bold hover:bg-red-400 hover:border-red-950" type="button" name="cancel" id="cancel">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mr-1">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12h-9m9 0l-4.5 4.5m4.5-4.5L12 7.5" />
-                  </svg> Cancel
-                </Link>
-              </div>
-            </center>
-      </form>
-      <CustomPopup
-          isOpen={isPopupOpen}
-          message={popupMessage}
-          onClose={() => {
-            setIsPopupOpen(false);
-            navigate("/listMeasurements");
-          }}
-          type={popupType}
-        />
-
-         
-        </div>
-      </div>
-
+      
+    
     </div>
+     {/* Content Wrapper Ends Here*/}
+     
+  </div>
   );
 }
 
-export default AddMeasurements;
+export default ListMeasurements;
+
+

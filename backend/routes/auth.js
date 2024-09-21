@@ -4,6 +4,7 @@ const authController = require('../controllers/authController');
 const itemController = require('../controllers/itemController');
 const feedbackController = require('../controllers/feedbackController');
 const measurementController = require('../controllers/measurementController');
+const bodyTypeController = require('../controllers/bodyTypeController');
 const ShopModel = require('../models/Shop.js');
 const ItemModel = require('../models/Item.js');
 // const Measurement = require('../models/Measurement.js');
@@ -73,6 +74,16 @@ router.get('/measurements', measurementController.getAllMeasurements);
 router.put('/measurements/updateMyMeasurements/:id', measurementController.updateMeasurements);
 router.delete('/measurements/deleteMyMeasurements/:id', measurementController.deleteMeasurements);
 router.get('/measurements/getUserMeasurements/:id', measurementController.getUserMeasurements);
+
+
+// Routes for Body Types
+router.post('/bodyTypes/addBodyType', upload.single('image'), bodyTypeController.addBodyType);
+// router.post('/bodyTypes/addBodyType', bodyTypeController.addBodyType);
+router.get('/bodyTypes/getAllBodyTypes', bodyTypeController.getAllBodyTypes);
+// router.put('/bodyTypes/updateBodyType/:id', bodyTypeController.updateBodyType);
+router.put('/bodyTypes/updateBodyType/:id', upload.single('image'), bodyTypeController.updateBodyType);
+router.delete('/bodyTypes/deleteBodyType/:id', bodyTypeController.deleteBodyType);
+router.get('/bodyTypes/getBodyType/:id', bodyTypeController.getBodyType);
 
 
 

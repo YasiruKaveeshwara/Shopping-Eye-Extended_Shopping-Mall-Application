@@ -17,11 +17,6 @@ const measurementSchema = new Schema({
         required: true
     },
 
-    // shoulders: {
-    //     type: Number,
-    //     required: true
-    // },
-
     bodyType: {
         type: String
     }
