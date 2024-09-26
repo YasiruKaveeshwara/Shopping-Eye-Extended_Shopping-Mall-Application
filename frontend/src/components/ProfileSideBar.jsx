@@ -1,7 +1,6 @@
-// src/components/ProfileSideBar.jsx
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaUser, FaEdit, FaLock, FaSignOutAlt } from "react-icons/fa";
+import { FaUser, FaEdit, FaLock, FaSignOutAlt, FaHeart } from "react-icons/fa"; // Import FaHeart for Wishlist icon
 
 const ProfileSideBar = () => {
   const location = useLocation();
@@ -12,6 +11,7 @@ const ProfileSideBar = () => {
     localStorage.removeItem("token");
     // Redirect to the login page
     navigate("/home");
+    window.location.reload();
   };
 
   return (
@@ -51,6 +51,20 @@ const ProfileSideBar = () => {
           <FaLock />
           <span>Change Password</span>
         </Link>
+
+        {/* Wishlist link */}
+        <Link
+          to="/wishlist"
+          className={`flex items-center space-x-2 ${
+            location.pathname === "/wishlist"
+              ? "text-orange-500"
+              : "hover:text-gray-300"
+          }`}
+        >
+          <FaHeart />
+          <span>View Wishlist</span>
+        </Link>
+
         <button
           onClick={handleLogout}
           className={`flex items-center space-x-2 ${

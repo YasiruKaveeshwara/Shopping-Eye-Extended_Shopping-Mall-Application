@@ -17,6 +17,7 @@ import ShopProfilePage from "./components/ShopProfilePage";
 import ItemsListPage from "./components/ItemsList";
 import ItemPage from "./components/ItemPage";
 import SearchResults from "./components/SearchResults";
+import ViewWishList from "./components/ViewWishList";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Header from "./components/Header";
 
@@ -48,6 +49,7 @@ function App() {
           <Route path="/shops/:id" element={<ShopProfilePage />} />
           <Route path="/items" element={<ItemsListPage />} />
           <Route path="/items/:id" element={<ItemPage />} />
+          <Route path="/wishlist" element={<ViewWishList />} />
           <Route path="/search" element={<SearchResults />} />
         </Routes>
       </Router>

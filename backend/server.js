@@ -1,3 +1,4 @@
+//server.js
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -51,7 +52,11 @@ app.use("/api/items", itemRouter);
 
 // Import and use search routes
 const searchRouter = require("./routes/searchRoutes");
-app.use("/api/search", searchRouter);
+app.use("/api", searchRouter);
+
+// Import and use wishlist routes
+const wishlistRoutes = require("./routes/wishlistRoutes");
+app.use("/api/wishlist", wishlistRoutes);
 
 // Start the server
 app.listen(PORT, () => {

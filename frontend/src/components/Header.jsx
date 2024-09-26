@@ -9,7 +9,10 @@ const Header = ({ searchQuery, setSearchQuery }) => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    navigate(`/search?query=${searchQuery}`);
+    // Only navigate if searchQuery is not empty
+    if (searchQuery.trim()) {
+      navigate(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
+    }
   };
 
   const isActive = (path) => location.pathname.startsWith(path);

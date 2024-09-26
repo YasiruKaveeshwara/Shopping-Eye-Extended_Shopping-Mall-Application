@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faHeartBroken } from "@fortawesome/free-solid-svg-icons";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
 
 const ItemsList = () => {
   const navigate = useNavigate();
@@ -14,8 +15,9 @@ const ItemsList = () => {
   const [maxPrice, setMaxPrice] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("All");
   const [wishlist, setWishlist] = useState([]); // Wishlist state
-  const [categories, setCategories] = useState([]); // State for unique categories
+  const currentUserId = localStorage.getItem("userId");
 
+  // Fetch items and initialize wishlist
   useEffect(() => {
     const fetchItems = async () => {
       try {
@@ -23,11 +25,11 @@ const ItemsList = () => {
         if (!response.ok) throw new Error("Failed to fetch items");
         const data = await response.json();
         setItems(data);
-        setFilteredItems(data); // Initialize filteredItems with all items
-        const uniqueCategories = [
-          ...new Set(data.map((item) => item.category))
-        ];
-        setCategories(uniqueCategories);
+
+        // Load wishlist from the server or localStorage
+        const savedWishlist =
+          JSON.parse(localStorage.getItem("wishlist")) || [];
+        setWishlist(savedWishlist);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -89,14 +91,46 @@ const ItemsList = () => {
     navigate(`/items/${id}`);
   };
 
-  const handleWishlistToggle = (item) => {
-    if (wishlist.includes(item)) {
-      setWishlist(wishlist.filter((wishItem) => wishItem._id !== item._id));
+  const handleWishlistToggle = async (item) => {
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+
+    let updatedWishlist;
+    if (isInWishlist(item)) {
+      // Remove the item if it's already in the wishlist
+      updatedWishlist = wishlist.filter(
+        (wishItem) => wishItem._id !== item._id
+      );
     } else {
-      setWishlist([...wishlist, item]);
+      // Add the item to the wishlist
+      updatedWishlist = [...wishlist, item];
+    }
+
+    setWishlist(updatedWishlist);
+    // Update localStorage immediately after modifying the wishlist
+    localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+
+    // Send the update to the server
+    try {
+      await axios.post(
+        "http://localhost:3050/api/wishlist",
+        {
+          userId: userId,
+          itemIds: updatedWishlist.map((wishItem) => wishItem._id)
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+      // Save updated wishlist to localStorage
+      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+      console.log("Wishlist updated successfully");
+    } catch (error) {
+      console.error("Error updating wishlist:", error);
     }
   };
 
+  // Check if the item is already in the wishlist
   const isInWishlist = (item) => {
     return wishlist.some((wishItem) => wishItem._id === item._id);
   };
@@ -122,18 +156,21 @@ const ItemsList = () => {
                 All
               </button>
             </li>
-            {categories.map((category) => (
-              <li key={category}>
-                <button
-                  className={`block mb-2 ${
-                    selectedCategory === category ? "text-orange-500" : ""
-                  }`}
-                  onClick={() => handleCategoryChange(category)}
-                >
-                  {category}
-                </button>
-              </li>
-            ))}
+            {/* Unique categories */}
+            {[...new Set(items.map((item) => item.category))].map(
+              (category) => (
+                <li key={category}>
+                  <button
+                    className={`block mb-2 ${
+                      selectedCategory === category ? "text-orange-500" : ""
+                    }`}
+                    onClick={() => handleCategoryChange(category)}
+                  >
+                    {category}
+                  </button>
+                </li>
+              )
+            )}
           </ul>
         </div>
 
@@ -147,7 +184,6 @@ const ItemsList = () => {
               value={minPrice}
               onChange={handlePriceChange}
               placeholder="Min Price"
-              style={{ width: "100px" }} // Custom width
               className="w-50 border p-2 mr-2 mb-5"
             />
             <input
@@ -156,7 +192,6 @@ const ItemsList = () => {
               value={maxPrice}
               onChange={handlePriceChange}
               placeholder="Max Price"
-              style={{ width: "100px" }} // Custom width
               className="w-50 border p-2"
             />
           </div>
@@ -169,7 +204,6 @@ const ItemsList = () => {
             id="location"
             value={selectedLocation}
             onChange={handleLocationChange}
-            style={{ width: "100px" }} // Custom width
             className="w-20 mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
           >
             <option value="All">All</option>
@@ -184,32 +218,52 @@ const ItemsList = () => {
       <div className="w-3/4 p-6">
         <h1 className="text-2xl font-semibold mb-4">Items</h1>
         <div className="bg-white p-6 rounded shadow-sm mb-6">
-          {/* <h2 className="text-2xl font-semibold mb-4">Products</h2> */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6">
             {filteredItems.length > 0 ? (
               filteredItems.map((item) => (
                 <div
                   key={item._id}
-                  className="bg-gray-100 p-4 rounded shadow-sm cursor-pointer"
-                  onClick={() => handleItemClick(item._id)} // Add this line
+                  className="bg-gray-100 p-4 rounded shadow-sm flex items-start justify-between relative"
                 >
-                  <img
-                    src={item.imageUrl}
-                    alt={item.productName}
-                    className="w-50 h-50 object-cover rounded"
-                  />
-                  <h3 className="text-lg font-semibold mt-2">
-                    {item.productName}
-                  </h3>
-                  <p className="text-gray-700">Category: {item.category}</p>
-                  <p className="text-gray-700">Price: ${item.price}</p>
-                  <p className="text-gray-700">Size: {item.size}</p>
-                  <p className="text-gray-700">Location: {item.itemLocation}</p>
-                  {/* <p className="mt-2">{item.description}</p> */}
+                  {/* Image on the left */}
+                  <div className="w-1/4">
+                    <img
+                      src={item.imageUrl}
+                      alt={item.productName}
+                      className="w-48 h-48 object-cover rounded cursor-pointer"
+                      onClick={() => handleItemClick(item._id)}
+                    />
+                  </div>
+
+                  {/* Item details on the right */}
+                  <div className="w-2/3 ml-4 flex flex-col">
+                    <h3
+                      className="text-lg font-semibold mt-2 cursor-pointer"
+                      onClick={() => handleItemClick(item._id)}
+                    >
+                      {item.productName}
+                    </h3>
+                    <p className="text-gray-700">Category: {item.category}</p>
+                    <p className="text-gray-700">Price: ${item.price}</p>
+                    <p className="text-gray-700">Size: {item.size}</p>
+                    <p className="text-gray-700">
+                      Location: {item.shopLocation}
+                    </p>
+
+                    {/* Render heart icon only if the item is not in the wishlist */}
+                    {!isInWishlist(item) && (
+                      <button
+                        onClick={() => handleWishlistToggle(item)}
+                        className="absolute top-2 right-2 text-red-500"
+                      >
+                        <FontAwesomeIcon icon={faHeart} />
+                      </button>
+                    )}
+                  </div>
                 </div>
               ))
             ) : (
-              <p>No products available for this shop.</p>
+              <p>No items found.</p>
             )}
           </div>
         </div>

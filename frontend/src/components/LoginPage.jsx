@@ -17,7 +17,10 @@ const LoginPage = () => {
         { email, password }
       );
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("userId", response.data.user._id); // Store user ID
+
       navigate("/profile");
+      window.location.reload();
     } catch (error) {
       setError(
         error.response
@@ -26,6 +29,35 @@ const LoginPage = () => {
       );
     }
   };
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+  //   setError("");
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:3050/api/auth/login",
+  //       {
+  //         email,
+  //         password
+  //       }
+  //     );
+
+  //     // Assuming response.data contains a user object
+  //     const { token, user } = response.data; // Destructure the response
+
+  //     // Store the token and user ID in localStorage
+  //     localStorage.setItem("token", token);
+  //     localStorage.setItem("userId", user._id); // Store user ID
+
+  //     // Navigate to the profile page
+  //     navigate("/profile");
+  //   } catch (error) {
+  //     setError(
+  //       error.response
+  //         ? error.response.data.msg
+  //         : "An error occurred. Please try again."
+  //     );
+  //   }
+  // };
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center">

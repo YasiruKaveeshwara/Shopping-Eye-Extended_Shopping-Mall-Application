@@ -56,7 +56,15 @@ router.post("/login", async (req, res) => {
 
     const payload = { user: { id: user.id } };
     const token = jwt.sign(payload, "your_jwt_secret", { expiresIn: "1h" });
-    res.json({ token });
+    // res.json({ token });
+    // Return token and user information (including user ID)
+    res.json({
+      token,
+      user: {
+        _id: user.id, // include user ID in response
+        email: user.email
+      }
+    });
   } catch (err) {
     console.error("Error in login route:", err.message);
     res.status(500).json({ msg: "Server error", error: err.message });
