@@ -10,6 +10,7 @@ export default function Home() {
   const [location, setLocation] = useState("");
   const [phone, setPhone] = useState("");
   const [products, setProducts] = useState([]);
+  const [wishlistItems, setWishlistItems] = useState([]);
 
   useEffect(() => {
     setEmail(localStorage.getItem("userEmail") || "");
@@ -20,6 +21,9 @@ export default function Home() {
 
     // Fetch products based on shop name
     fetchProducts(localStorage.getItem("shopName") || "");
+    
+    // Fetch wishlist items based on user email (assuming you use email as userId)
+    fetchWishlist(localStorage.getItem("userEmail") || "");
   }, []);
 
   const fetchProducts = async (shopName) => {
@@ -32,6 +36,16 @@ export default function Home() {
       setProducts(filteredProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
+    }
+  };
+
+  const fetchWishlist = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:3050/api/wishlist/${userId}`);
+      const data = await response.json();
+      setWishlistItems(data);
+    } catch (error) {
+      console.error('Error fetching wishlist:', error);
     }
   };
 
@@ -55,8 +69,26 @@ export default function Home() {
     // Implement edit functionality or navigation to edit page
   };
 
-  const handleWishlist = (product) => {
-    // Implement wishlist functionality
+  const handleWishlist = async (product) => {
+    try {
+      const userId = localStorage.getItem("userEmail"); // Assuming userId is stored as email
+      const response = await fetch('http://localhost:3050/api/wishlist/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, itemId: product._id }),
+      });
+
+      if (response.ok) {
+        alert('Item added to wishlist');
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message);
+      }
+    } catch (error) {
+      console.error('Error adding to wishlist:', error);
+    }
   };
 
   return (

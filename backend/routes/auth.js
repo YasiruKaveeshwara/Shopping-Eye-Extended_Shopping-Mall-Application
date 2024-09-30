@@ -3,6 +3,7 @@ const router = express.Router();
 const authController = require('../controllers/authController');
 const itemController = require('../controllers/itemController');
 const feedbackController = require('../controllers/feedbackController'); 
+const wishlistController = require('../controllers/wishlistController'); // Import the wishlist controller
 const ShopModel = require('../models/Shop.js');
 const ItemModel = require('../models/Item.js');
 const upload = require('../config/multer');
@@ -61,5 +62,16 @@ router.get('/feedback/:shopId', feedbackController.getFeedbackByShop);
 
 // Route to get all feedback (for an admin page if needed)
 router.get('/feedback', feedbackController.getAllFeedback);
+
+
+
+// Add item to wishlist
+router.post('/wishlist/add', wishlistController.addToWishlist);
+
+// Get user's wishlist
+router.get('/wishlist/:userId', wishlistController.getWishlist);
+
+// Route to get all wishlist (for an admin page if needed)
+router.get('/wishlist', wishlistController.getAllWishlist);
 
 module.exports = router;

@@ -1,6 +1,5 @@
 import React from "react";
 import SidebarIcon from "../components/sidebar/SidebarIcon";
-import { BsFillArchiveFill, BsFillGrid3X3GapFill, BsPeopleFill, BsFillBellFill } from "react-icons/bs";
 import {
   ResponsiveContainer,
   BarChart,
@@ -21,15 +20,12 @@ import {
 import "./Analytics.css";
 import html2canvas from "html2canvas";
 import html2pdf from "html2pdf.js";
-import { useProductContext } from './ProductContext'; // Import the context hook
+import { useProductContext } from './ProductContext';
 
 const data = [
-  { name: "Jan", pv: 2400, uv: 4000 },
-  { name: "Feb", pv: 1398, uv: 3000 },
-  { name: "Mar", pv: 9800, uv: 2000 },
-  { name: "Apr", pv: 3908, uv: 2780 },
-  { name: "May", pv: 4800, uv: 1890 },
-  { name: "Jun", pv: 3800, uv: 2390 },
+  { name: "Total Products", pv: 8 },
+  { name: "Wishlist Products", pv: 12 },
+
 ];
 
 const pieData = [
@@ -40,8 +36,8 @@ const pieData = [
 ];
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-
 const RADIAN = Math.PI / 180;
+
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -55,7 +51,6 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 };
 
 const generatePDF = async (productCount) => {
-  // Capture the charts as images using html2canvas
   const chartElements = document.querySelectorAll('.chart');
   const chartImages = [];
 
@@ -65,36 +60,36 @@ const generatePDF = async (productCount) => {
     chartImages.push(`<img src="${chartImg}" style="width: 100%; height: auto;" />`);
   }
 
-  // Create the PDF content with charts included as images
   const pdfContent = `
-    <div style="font-family: Arial, sans-serif;">
-      <h2>Shop Analytics</h2>
-      <h3>Summary</h3>
-      <table border="1" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse;">
-        <thead>
-          <tr>
-            <th>Total Products</th>
-            <th>Wishlist Added</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>${productCount}</td> <!-- Use the actual product count here -->
-            <td>12</td> <!-- Static value for wishlist added -->
-          </tr>
-        </tbody>
-      </table>
-
-      <h3>Charts</h3>
+  <div style="font-family: Arial, sans-serif; margin: 20px;">
+    <h2 style="text-align: center; color: #333;">Shop Analytics</h2>
+    <h3 style="color: #555;">Summary</h3>
+    <table border="1" cellpadding="8" cellspacing="0" style="width: 100%; border-collapse: collapse; border: 2px solid #ccc;">
+      <thead>
+        <tr style="background-color: #f2f2f2;">
+          <th style="border: 1px solid #ccc; text-align: left;">Total Products</th>
+          <th style="border: 1px solid #ccc; text-align: left;">Wishlist Added</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="border: 1px solid #ccc; text-align: left;">${productCount}</td>
+          <td style="border: 1px solid #ccc; text-align: left;">12</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <h3 style="color: #555;">Charts</h3>
+    <div style="display: flex; flex-direction: column; align-items: center;">
       ${chartImages.join('')}
     </div>
-  `;
+  </div>
+`;
 
-  // Create a new element to store the content for the PDF
+
   const element = document.createElement("div");
   element.innerHTML = pdfContent;
 
-  // Set PDF options
   const opt = {
     margin: 1,
     filename: 'shop_analytics.pdf',
@@ -102,43 +97,39 @@ const generatePDF = async (productCount) => {
     jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
   };
 
-  // Generate and save the PDF
   html2pdf().from(element).set(opt).save();
 };
 
 export default function AnalyticsPage() {
-  const { productCount } = useProductContext(); // Access product count from context
+  const { productCount } = useProductContext();
 
   return (
     <div className="analytics-container">
-      <SidebarIcon /> {/* Sidebar with the shop info */}
-
+      <SidebarIcon />
       <main className="main-content">
         <div className="main-title">
           <h3>ANALYTICS DASHBOARD</h3>
           <button className="download-btn" onClick={() => generatePDF(productCount)}>Download Analytics</button>
         </div>
 
-        {/* Cards Section */}
         <div id="analytics-content" className="main-cards">
           <div className="card">
             <div className="card-inner">
               <h3>TOTAL PRODUCTS</h3>
             </div>
-            <h1>{productCount}</h1> {/* Display product count */}
+            <h1>{productCount}</h1>
           </div>
 
           <div className="card">
             <div className="card-inner">
               <h3>WISHLIST ADDED</h3>
             </div>
-            <h1>12</h1> {/* Static value for wishlist added */}
+            <h1>12</h1>
           </div>
         </div>
 
         {/* Charts Section */}
         <div className="charts">
-          {/* Flexbox container for the LineChart and PieChart */}
           <div className="chart-row">
             <div className="chart">
               <ResponsiveContainer width="100%" height={300}>
@@ -154,74 +145,22 @@ export default function AnalyticsPage() {
               </ResponsiveContainer>
             </div>
 
-
             <div className="chart">
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={data}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="pv" fill="#8884d8" />
-                <Bar dataKey="uv" fill="#82ca9d" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          </div>
-
-
-
-          <div className="chart-row">
-          <div className="chart">
               <ResponsiveContainer width="100%" height={300}>
-                <ComposedChart
-                  width={500}
-                  height={400}
-                  data={data}
-                  margin={{
-                    top: 20,
-                    right: 20,
-                    bottom: 20,
-                    left: 20,
-                  }}
-                >
-                  <CartesianGrid stroke="#f5f5f5" />
-                  <XAxis dataKey="name" scale="band" />
+                <BarChart data={data}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Area type="monotone" dataKey="amt" fill="#8884d8" stroke="#8884d8" />
-                  <Bar dataKey="pv" barSize={20} fill="#413ea0" />
-                  <Line type="monotone" dataKey="uv" stroke="#ff7300" />
-                </ComposedChart>
-              </ResponsiveContainer>
-            </div>
-            
-          <div className="chart">
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart width={400} height={400}>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={renderCustomizedLabel}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                </PieChart>
+                  <Bar dataKey="pv" fill="#8884d8" />
+                  <Bar dataKey="uv" fill="#82ca9d" />
+                </BarChart>
               </ResponsiveContainer>
             </div>
           </div>
 
-
-         
+        
         </div>
       </main>
     </div>

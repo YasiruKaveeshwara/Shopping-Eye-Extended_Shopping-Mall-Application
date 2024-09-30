@@ -39,23 +39,6 @@ export default function Shops() {
     setEditingShop(null);
   };
 
-  // const handleDelete = async (id) => {
-  //   try {
-  //     const response = await fetch(`http://localhost:3050/api/shops/${id}`, {
-  //       method: 'DELETE',
-  //     });
-  //     const data = await response.json();
-  //     if (response.ok) {
-  //       setShop(null);
-  //       alert(data.message);
-  //     } else {
-  //       alert(data.message);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error deleting shop:', error);
-  //   }
-  // };
-
   return (
     <>
       <SidebarIcon />
@@ -74,46 +57,46 @@ export default function Shops() {
             {shop ? (
               <form className="shop-form">
                 <h3 className="form-title">Shop Profile</h3>
-                <div className="form-group">
-                  <label>Shop Name</label>
-                  <input type="text" value={shop.shopName} readOnly />
-                </div>
-
-                <div className="form-group">
-                  <label>Owner</label>
-                  <input type="text" value={shop.ownerName} readOnly />
-                </div>
-
-                <div className="form-group">
-                  <label>Category</label>
-                  <input type="text" value={shop.shopCategory} readOnly />
-                </div>
-
-                <div className="form-group">
-                  <label>Location</label>
-                  <input type="text" value={shop.location} readOnly />
-                </div>
-
-                <div className="form-group">
-                  <label>Phone</label>
-                  <input type="text" value={shop.phone} readOnly />
-                </div>
-
-                <div className="form-group">
-                  <label>Email</label>
-                  <input type="email" value={shop.email} readOnly />
-                </div>
-
                 {shop.shopLogo && (
-                  <div className="form-group">
-                    <label>Shop Logo</label>
+                  <div className="shop-logo-container">
                     <img
                       src={shop.shopLogo}
                       alt={shop.shopName}
                       className="shop-image"
                     />
                   </div>
-                )}
+                )}<br></br><br></br>
+                <div className="form-fields">
+                  <div className="form-group">
+                    <label>Shop Name</label>
+                    <input type="text" value={shop.shopName} readOnly />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Owner</label>
+                    <input type="text" value={shop.ownerName} readOnly />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Category</label>
+                    <input type="text" value={shop.shopCategory} readOnly />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Location</label>
+                    <input type="text" value={shop.location} readOnly />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Phone</label>
+                    <input type="text" value={shop.phone} readOnly />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Email</label>
+                    <input type="email" value={shop.email} readOnly />
+                  </div>
+                </div>
 
                 <div className="form-actions">
                   <button
@@ -123,8 +106,9 @@ export default function Shops() {
                   >
                     Edit
                   </button>
-                 
                 </div>
+
+                
               </form>
             ) : (
               <p>No shop available for the logged-in user.</p>

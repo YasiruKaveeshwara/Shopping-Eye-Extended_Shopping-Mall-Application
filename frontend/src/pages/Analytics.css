@@ -11,7 +11,7 @@
   .main-title h3 {
     font-size: 25px;
     font-weight: bold;
-    color: #16002e;
+    color: #1F2937;
     padding-right: 300PX;
   }
   .main-title{
@@ -24,7 +24,7 @@
   }
   
   .card {
-    background: #fff;
+    background: #b1c7d5;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     flex: 1;
@@ -45,7 +45,7 @@
   .card h1 {
     margin-top: 10px;
     font-size: 32px;
-    color: #16002e;
+    color: #1F2937;
   }
   
   .card_icon {
@@ -72,7 +72,7 @@
     height: 300px;
   }
   .download-btn {
-    background-color: #16002e;
+    background-color: #1F2937;
     color: white;
     border: none;
     padding: 10px 20px;

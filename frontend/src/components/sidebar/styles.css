@@ -17,7 +17,7 @@ body {
 }
 /* Sidebar styles */
 .sidebar {
-  background: #16002e;
+  background: #1F2937;
   position: fixed;
   width: 200px;
   height: 100%;
@@ -28,7 +28,7 @@ body {
 }
 
 .box-above-dashboard {
-  background: #16002e;
+  
   margin-right: 29px;
   text-align: center;
   margin-bottom: 35px;
@@ -118,6 +118,7 @@ body {
   text-align: left;
   margin: 10px 0;
   font-size: 14px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   color: #666;
 }
 .product-card h3 {
@@ -188,7 +189,7 @@ body {
 
  
 .edit-button {
-  background-color: #16002e;
+  background-color: #1F2937;
   color: #fff;
   padding: 12px 20px;
   margin-right: 8px;
@@ -198,7 +199,40 @@ body {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+.add-button{
+  background-color: #1F2937;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  margin-left: 1000px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
 .edit-button:hover {
   background-color: #ff742f;
 }
+
+/* Keyframe for the fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px); /* Slight upward movement */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Apply the animation to the heading */
+.heading {
+  font-size: 25px;
+  font-weight: bold;
+  color: #16002e;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  animation: fadeIn 1s ease-in-out;
+}
+
