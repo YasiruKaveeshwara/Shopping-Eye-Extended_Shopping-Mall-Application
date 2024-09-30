@@ -47,18 +47,41 @@ exports.getBodyType = async (req, res) => {
 // Update a body type by ID
 exports.updateBodyType = async (req, res) => {
     try {
-        const { name, description, images } = req.body;
-        const updatedBodyType = await BodyType.findByIdAndUpdate(
-            req.params.id,
-            { name, description, images },
-            { new: true }
-        );
-        if (!updatedBodyType) return res.status(404).json({ message: 'Body type not found' });
-        res.status(200).json(updatedBodyType);
+        const { name, description } = req.body;
+        const image = req.file;  // Get the uploaded image
+        
+        // Find the existing body type
+        const bodyType = await BodyType.findById(req.params.id);
+        if (!bodyType) {
+            return res.status(404).json({ message: 'Body type not found' });
+        }
+
+        // Upload new image to Cloudinary if provided
+        let imageUrl = bodyType.imageUrl;  // Retain the old image URL
+        if (image) {
+            const result = await cloudinary.uploader.upload(image.path);
+            imageUrl = result.secure_url;  // Use the new uploaded image URL
+        }
+
+        // Update the body type fields
+        bodyType.name = name || bodyType.name;
+        bodyType.description = description || bodyType.description;
+        bodyType.imageUrl = imageUrl;
+
+        // Save the updated body type
+        await bodyType.save();
+
+        res.status(200).json({
+            message: 'Body Type updated successfully',
+            BodyType: bodyType,
+        });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 };
+
+
+
 
 // Delete a body type by ID
 exports.deleteBodyType = async (req, res) => {

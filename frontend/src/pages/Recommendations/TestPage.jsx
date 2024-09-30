@@ -1,156 +1,221 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
-import ConfirmDeletion from '../Recommendations/Components/ConfirmDeletion'; // Import the modal component // Import the modal component
+import React, { useState, useEffect  } from 'react'
+import axios from "axios"
+import { useNavigate } from "react-router-dom"
+import { useParams } from "react-router-dom"
+import CustomPopup from '../Recommendations/Components/CustomPopup'; // Modal component
 
+const AddMeasurements = () => {
+  const [form, setForm] = useState({
+    name: '',
+    description: '',
+    image: null  
+  });
+  const [error, setError] = useState('');
+  const [imagePreview, setImagePreview] = useState('');  // For displaying image preview
 
-const ListMeasurements = () => {
-  const [bodyTypes, setBodyTypes] = useState([]);
-  const [selectedBodyTypesId, setSelectedBodyTypesId] = useState(null);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [popupMessage, setPopupMessage] = useState('');
   const [popupType, setPopupType] = useState('info'); // 'info' or 'error'
+  const navigate = useNavigate();
+
+  const { bodyTypesId } = useParams(); // Get the eventId from URL params
+  const [selectedBodyType, setSelectedBodyType] = useState(null);
+
+
+  useEffect(() => {
+    if (bodyTypesId) {
+      // Only trigger this effect if bodyTypesId exists
+      axios
+        .get(`http://localhost:3050/api/bodyTypes/getBodyType/${bodyTypesId}`)
+        .then(response => {
+          console.log('Fetched BodyType:', response.data.bodyType); // Print the fetched body type
+          setSelectedBodyType(response.data.bodyType); // Set the body type data
+        })
+        .catch(error => {
+          console.error('There was an error fetching the body type!', error);
+        });
+    }
+  }, [bodyTypesId]);
+
 
 
     useEffect(() => {
-      const fetchBodyTypes = async () => {
-        try {
-          const response = await fetch('http://localhost:3050/api/bodyTypes/getAllBodyTypes');
-          const data = await response.json();
-          setBodyTypes(data);
-        } catch (error) {
-          console.error('Error fetching BodyTypes list:', error);
-        }
-      };
-  
-      fetchBodyTypes();
-    }, []);
+    if (selectedBodyType) {
+      setForm({
+        name: selectedBodyType.name || '',
+        description: selectedBodyType.description || '',  // Set description
+        image: null  // Clear image state
+      });
+      setImagePreview(selectedBodyType.imageUrl || '');  // Set image preview
+    }
+  }, [selectedBodyType]);
+
+
+
+  const onUpdateField = (e) => {
+    const { name, value } = e.target;
+    setForm({
+      ...form,
+      [name]: value,
+    });
+  };
 
   
+  const onFileChange = (e) => {
+    setForm({
+      ...form,
+      image: e.target.files[0]  // Handle image file
+    });
 
-    const handleDeleteClick = (bodyTypesId) => {
-        setSelectedBodyTypesId(bodyTypesId); // Set the option ID to state
-        setIsModalOpen(true); // Show the modal
-      };
+    // Set image preview
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => setImagePreview(reader.result);
+      reader.readAsDataURL(file);
+    }
+  };
 
 
-
-    const confirmDelete = async () => {
-        if (selectedBodyTypesId) {
-          try {
-            await axios.delete(`http://localhost:3050/api/bodyTypes/deleteBodyType/${selectedBodyTypesId}`);
-            setIsModalOpen(false); // Close the modal
-            // Custom success notification
-            setPopupMessage("BodyType Deleted Successfully!");
-            setPopupType('info');
-            setIsPopupOpen(true);
-            setBodyTypes(bodyTypes.filter(bodyType => bodyType._id !== selectedBodyTypesId)); // Update state to remove the item
-          } catch (error) {
-            console.error("Error deleting Body Type:", error.message);
-            // Custom error notification
-            setPopupMessage("Error deleting Body Types. Please try again.");
-            setPopupType('error');
-            setIsPopupOpen(true);
-          }
-        }
-      };
+  const onSubmit = async (e) => {
+    e.preventDefault();
   
-
+    // Basic validation
+    if (!form.name || !form.description) {
+      setError('Please fill in all fields.');
+      return;
+    }
+  
+    try {
+      // Determine URL and method based on whether bodyTypesId is present
+      const url = bodyTypesId
+        ? `http://localhost:3050/api/bodyTypes/updateBodyType/${bodyTypesId}`
+        : 'http://localhost:3050/api/bodyTypes/addBodyType';
+      const method = bodyTypesId ? 'PUT' : 'POST';
+  
+      // Prepare FormData object
+      const formData = new FormData();
+      formData.append('name', form.name);
+      formData.append('description', form.description);
+      if (form.image) formData.append('image', form.image); // Append image if provided
+  
+      // Send request
+      const response = await fetch(url, {
+        method,
+        body: formData, // No need to set Content-Type with FormData
+      });
+  
+      // Convert response to JSON
+      const data = await response.json();
+  
+      // Handle the response based on success or error
+      if (response.ok) {
+        handleResponse('BodyType saved/updated successfully!', 'info');
+      } else {
+        handleError(data.message || 'Error saving/updating BodyType. Please try again.');
+      }
+    } catch (error) {
+      handleError('Error saving/updating BodyType. Please try again.');
+    }
+  };
+  
+  // Handle success response
+  const handleResponse = (message, type) => {
+    setPopupMessage(message);
+    setPopupType(type);
+    setIsPopupOpen(true);
+  
+    // Reset form after successful submission
+    setForm({
+      name: '',
+      description: '',
+      image: null,
+    });
+    setImagePreview(''); // Reset image preview
+    setError(''); // Clear any previous errors
+  };
+  
+  // Handle error response
+  const handleError = (message) => {
+    setPopupMessage(message);
+    setPopupType('error');
+    setIsPopupOpen(true);
+  };
+  
+  // Handle cancel button click
+  const handleCancel = () => {
+    navigate('/listBodyTypes'); // Navigate to body types list
+  };
+  
 
   return (
-    <div className="relative min-h-screen">
-      
-  
-    {/* Content Wrapper */}
-    <div className="relative z-10 flex flex-col items-center  min-h-screen">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 p-5">
+      <form className="bg-white shadow-md rounded-lg p-6 w-full max-w-lg" onSubmit={onSubmit}>
+        <h2 className="text-2xl font-bold mb-5 text-gray-800 text-center">{bodyTypesId ? 'Edit Product' : 'Add Product'}</h2>
 
-    <Link to="/bodyTypeForm" className="flex items-center ml-5 mb-4 mt-5 text-white text-xl font-mclaren px-2 py-1 bg-blue-500 hover:bg-blue-800 rounded-3xl">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mr-1">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>Add Body Type
-          </Link>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">Body Type Name</label>
+          <input
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500"
+            type="text"
+            name="name"
+            value={form.name}
+            onChange={onUpdateField}
+            required
+          />
+        </div>
 
-            
-  
-      {/* Your scrolling content */}
-      {/* {allEvents && allEvents.map((event) => ( */}
-      <h2 className="text-2xl font-bold text-blue-800 mt-10 mb-4">BodyTypes List</h2>
-      <div className="shadow-2xl shadow-theme-blue rounded-3xl overflow-hidden">
-        <table className="min-w-full leading-normal opacity-80 bg-white">
-          <thead className="font-bold text-left text-blue-800 bg-blue-100 rounded-t-3xl">
-            <tr>
-              <th className="px-5 py-3 border-b-2 border-gray-200">Name</th>
-              <th className="px-5 py-3 border-b-2 border-gray-200">Description</th>
-              <th className="px-5 py-3 border-b-2 border-gray-200">Image</th>
-            </tr>
-          </thead>
-          <tbody>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">Description</label>
+          <textarea
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500"
+            name="description"
+            value={form.description}
+            onChange={onUpdateField}
+            rows="4"
+          />
+        </div>
 
-  {bodyTypes.map((bodyType) => (
-      <tr key={bodyType._id} className="border-b border-gray-200 hover:bg-blue-50 hover:opacity-50 ">
-        <td className="px-5 py-2">{bodyType.name}</td>
-        <td className="px-5 py-2">{bodyType.description}</td>
-        <td className="px-5 py-2"> <img
-          src={bodyType.imageUrl}
-          alt={bodyType.name}
-          className="product-image"
-        /></td>
-        <td>
-              <Link to={`/updateBodyType/${bodyType._id}`} className="flex items-center text-white text-xl font-mclaren px-3 py-1  bg-blue-500 hover:bg-blue-800   rounded-3xl">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mr-1">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-              </svg> </Link>
-              </td>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">Image</label>
+          {imagePreview && (
+            <div className="mb-4">
+              <img src={imagePreview} alt="" className="w-full h-auto rounded-lg" />
+            </div>
+          )}
+          <input
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-500"
+            type="file"
+            name="image"
+            onChange={onFileChange}
+          />
+        </div>
 
-              <td>
-              <button className="ml-5 flex items-center text-white text-xl font-mclaren px-3 py-1  bg-red-500 hover:bg-red-800 rounded-3xl" 
-               onClick={() => {
-                setSelectedBodyTypesId(bodyType._id);
-                setIsModalOpen(true);
-              }}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mr-1">
-              <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-            </svg>  </button>
-              </td>
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
-              <td>
-              <Link to={`/myRecommendations/${bodyType._id}`} className="ml-5 mr-4 flex items-center text-white text-xl font-mclaren px-3 py-1  bg-green-500 hover:bg-green-800   rounded-3xl">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="size-6">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-</svg>
-  </Link>
-              </td>
-      </tr>
-  ))}
-</tbody>
-
-        </table>
-      </div>
-
-      {/* Use the Confirm Deletion Modal here */}
-      <ConfirmDeletion
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onConfirm={confirmDelete}
-      />
+        <div className="flex justify-between">
+          <button type="submit" className="bg-indigo-500 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-500">
+            {bodyTypesId ? 'Update BodyType' : 'Add BodyType'}
+          </button>
+          <button type="button" onClick={handleCancel} className="bg-gray-500 text-white font-bold py-2 px-4 rounded-md hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-500">
+            Cancel
+          </button>
+        </div>
+      </form>
 
 
-    {/* Scrolling content End*/}
-  
-      
-      
-    
+      <CustomPopup
+          isOpen={isPopupOpen}
+          message={popupMessage}
+          onClose={() => {
+            setIsPopupOpen(false);
+            navigate("/listBodyTypes");
+          }}
+          type={popupType}
+        />
+
     </div>
-     {/* Content Wrapper Ends Here*/}
-     
-  </div>
   );
 }
 
-export default ListMeasurements;
-
-
+export default AddMeasurements;

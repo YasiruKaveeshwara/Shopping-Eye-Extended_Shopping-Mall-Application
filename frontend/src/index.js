@@ -40,7 +40,7 @@ ReactDOM.render(
         <Route path="/myRecommendations/:measurementsId" element={<MyRecommendations />} />
         <Route path='/updateMyMeasurements/:measurementsId' element={<AddMeasurements />} />
         <Route path='/bodyTypeForm' element={<BodyTypeForm />} />
-        <Route path='/updateBodyType/:bodyTypeId' element={<BodyTypeForm />} />
+        <Route path='/updateBodyType/:bodyTypesId' element={<BodyTypeForm />} />
         <Route path='/listBodyTypes' element={<ListBodyTypes />} />
         {/* <Route path='/myRecommendations/:measurementsId' element={<MyRecommendations />} /> */}
         {/* <Route path='/myRecommendations/:measurementsId' element={<TestPage />} /> */}
