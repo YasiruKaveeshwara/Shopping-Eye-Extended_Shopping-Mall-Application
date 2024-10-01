@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { useParams } from "react-router-dom"
 import CustomPopup from '../Recommendations/Components/CustomPopup'; // Modal component
 
-const AddMeasurements = () => {
+const BodyTypeForm = () => {
   const [form, setForm] = useState({
     name: '',
     description: '',
@@ -23,13 +23,15 @@ const AddMeasurements = () => {
 
 
   useEffect(() => {
+    console.log('bodyTypesId:', bodyTypesId); // Print the bodyTypesId
     if (bodyTypesId) {
       // Only trigger this effect if bodyTypesId exists
+
       axios
         .get(`http://localhost:3050/api/bodyTypes/getBodyType/${bodyTypesId}`)
         .then(response => {
-          console.log('Fetched BodyType:', response.data.bodyType); // Print the fetched body type
-          setSelectedBodyType(response.data.bodyType); // Set the body type data
+          console.log('Fetched BodyType:', response.data); // Print the fetched body type
+          setSelectedBodyType(response.data); // Set the body type data
         })
         .catch(error => {
           console.error('There was an error fetching the body type!', error);
@@ -213,9 +215,9 @@ const AddMeasurements = () => {
           }}
           type={popupType}
         />
-
+        
     </div>
   );
 }
 
-export default AddMeasurements;
+export default BodyTypeForm;

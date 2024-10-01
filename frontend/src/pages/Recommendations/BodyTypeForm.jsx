@@ -215,7 +215,7 @@ const BodyTypeForm = () => {
           }}
           type={popupType}
         />
-
+        
     </div>
   );
 }
