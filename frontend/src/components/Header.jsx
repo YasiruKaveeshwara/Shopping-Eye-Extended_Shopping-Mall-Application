@@ -94,6 +94,11 @@ const Header = ({ searchQuery, setSearchQuery }) => {
                   Join now →
                 </button>
               </Link>
+              <Link to="/">
+                <button className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-6 rounded-lg">
+                  Shop Login →
+                </button>
+              </Link>
             </>
           )}
         </div>
