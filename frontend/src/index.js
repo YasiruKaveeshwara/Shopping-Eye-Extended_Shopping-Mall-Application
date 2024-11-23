@@ -37,7 +37,8 @@ ReactDOM.render(
         <Route path='/QR' element={<ShopQR />} />
         <Route path='/map' element={<Map />} />
         <Route path='/scanQR' element={<ScanQR />} />
-        <Route path='/locations' element={<Locations />} />
+        <Route path='/locations/:locationId' element={<Locations />} />
+        
       </Routes>
     </AuthContextProvider>
   </BrowserRouter>,

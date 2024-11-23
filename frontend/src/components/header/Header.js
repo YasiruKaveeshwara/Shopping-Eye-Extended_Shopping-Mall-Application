@@ -5,11 +5,9 @@ import sidebarIcon from "../../images/list.png"; // Import the image
 import scanIcon from "./QrCode.gif";
 import ScanQR from "../../pages/scanQR.jsx";
 
-
-
 export default function Header({ toggleSidebar }) {
   const [showScanQRPopup, setShowScanQRPopup] = useState(false); // State to control ScanQR popup
-
+  
   const handleScanClick = () => {
     setShowScanQRPopup(true); // Show the ScanQR popup when scan icon is clicked
   };
@@ -45,7 +43,7 @@ export default function Header({ toggleSidebar }) {
 
       {/* Conditionally render ScanQR component */}
       {showScanQRPopup && (
-        <div className="popup">
+        <div className='popup'>
           <ScanQR closePopup={handleCloseScanQR} /> {/* Pass close function as prop */}
         </div>
       )}

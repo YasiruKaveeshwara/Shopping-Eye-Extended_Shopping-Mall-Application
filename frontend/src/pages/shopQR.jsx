@@ -57,7 +57,7 @@ export default function ShopQR() {
       </div>
 
       {qrCode && (
-        <div>
+        <div style={{ textAlign: "center" }}>
           <h2>QR Code :</h2>
           <QRCodeCanvas value={qrCode} />
         </div>

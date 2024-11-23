@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import "./scanQR.css";
-import Close from "./Close.gif";
+import Close from "../images/close.gif";
 
 export default function ScanQR({ closePopup }) {
   const [scannedData, setScannedData] = useState("");
@@ -37,26 +37,23 @@ export default function ScanQR({ closePopup }) {
 
   return (
     <>
-      {showScanner && <div className="popup-overlay"></div>} {/* Popup overlay */}
-      <div className="container">
-        <img src={Close} className="close-popup" onClick={closePopup} alt="Close"/> {/* Close button */}
-        <div className="scan-qr-wrapper">
+      {showScanner && <div className='popup-overlay'></div>} {/* Popup overlay */}
+      <div className='container'>
+        <img src={Close} className='close-popup' onClick={closePopup} alt='Close' /> {/* Close button */}
+        <div className='scan-qr-wrapper'>
           {showScanner && (
-            <>
-              <div className="qr-scanner-container">
-                <div id="reader"></div>
-                <div className="qr-scanner-border"></div>
-                {/* Add the animated line */}
-                <div className="scanner-line"></div>
-              </div>
-            </>
+            <div className='qr-scanner-container'>
+              <div id='reader'></div>
+              <div className='qr-scanner-border'></div>
+              <div className='scanner-line'></div>
+            </div>
           )}
 
           {scannedData && (
             <div>
               <h2>Go to Location</h2>
               <p>{scannedData}</p>
-              <button onClick={() => window.location.href = `http://localhost:3000/map/${scannedData}`}>Location</button>
+              <button onClick={() => (window.location.href = `http://localhost:3000/locations/${scannedData}`)}>Location</button>
             </div>
           )}
         </div>
